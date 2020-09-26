@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">PostBrowser</string>
+    <string name="post_list_label">Challenge Accepted!</string>
+
 </resources>
