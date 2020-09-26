@@ -22,6 +22,7 @@ class PostListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        viewModel.toString()
         return inflater.inflate(R.layout.main_fragment, container, false)
     }
 }
