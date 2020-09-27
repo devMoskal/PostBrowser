@@ -6,9 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.dev.moskal.postbrowser.R
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.dev.moskal.postbrowser.databinding.PostListFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class PostListFragment : Fragment() {
@@ -17,16 +18,34 @@ class PostListFragment : Fragment() {
         fun newInstance() = PostListFragment()
     }
 
+    @Inject
+    lateinit var postAdapter: PostListAdapter
+
     private val viewModel: PostListViewModel by viewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        viewModel.postList.observe(viewLifecycleOwner) {
-            Timber.i("### $it")
-        }
+    private lateinit var binding: PostListFragmentBinding
 
-        return inflater.inflate(R.layout.main_fragment, container, false)
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+        binding = PostListFragmentBinding.inflate(inflater, container, false)
+        setupRecyclerView()
+        return binding.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        binding.viewState = viewModel.viewState
+        binding.lifecycleOwner = viewLifecycleOwner
+    }
+
+
+    private fun setupRecyclerView() {
+        with(binding.recyclerView) {
+            layoutManager = LinearLayoutManager(context)
+            hasFixedSize()
+            adapter = postAdapter
+        }
     }
 }

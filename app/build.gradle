@@ -50,9 +50,13 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.fragment:fragment-ktx:$fragment_ktx_version"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$livedate_ktx_version"
+    implementation "androidx.recyclerview:recyclerview:$recycler_version"
+    implementation "androidx.cardview:cardview:$cardview_version"
 
     // DI
     implementation "com.google.dagger:hilt-android:$hilt_version"
+
+
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
     kapt "androidx.hilt:hilt-compiler:$hilt_androidx_version"
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_androidx_version"
