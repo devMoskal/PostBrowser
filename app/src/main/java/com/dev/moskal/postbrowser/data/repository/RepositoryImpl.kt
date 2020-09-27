@@ -21,7 +21,7 @@ class RepositoryImpl(
     override suspend fun fetchData() =
         try {
             val posts = postRepository.fetchData()
-            dao.insertPosts(posts)
+            dao.batchUpdate(posts)
             Resource.Success(Unit)
         } catch (error: Throwable) {
             Resource.Error(error)

@@ -6,7 +6,7 @@ import com.dev.moskal.postbrowser.data.db.PostBrowserDao
 import com.dev.moskal.postbrowser.data.db.mapPostDbEntityToDomainModel
 import com.dev.moskal.postbrowser.data.db.mapPostDomainModelToDbEntity
 import com.dev.moskal.postbrowser.data.network.api.PostApi
-import com.dev.moskal.postbrowser.data.network.mapper.mapPostAdiResponseToDomainModel
+import com.dev.moskal.postbrowser.data.network.mapper.mapPostApiResponseToDomainModel
 import com.dev.moskal.postbrowser.data.network.response.PostApiResponse
 import com.dev.moskal.postbrowser.data.repository.PostRepository
 import com.dev.moskal.postbrowser.data.repository.RepositoryImpl
@@ -34,7 +34,7 @@ class RepositoryModule {
         PostRepository(
             api,
             dao,
-            List<PostApiResponse>::mapPostAdiResponseToDomainModel,
+            List<PostApiResponse>::mapPostApiResponseToDomainModel,
             List<Post>::mapPostDomainModelToDbEntity,
             List<DbPost>::mapPostDbEntityToDomainModel,
         )
