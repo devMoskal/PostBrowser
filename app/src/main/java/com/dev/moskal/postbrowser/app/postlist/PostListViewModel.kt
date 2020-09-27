@@ -3,6 +3,7 @@ package com.dev.moskal.postbrowser.app.postlist
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import com.dev.moskal.postbrowser.app.postlist.PostListItem.PostLoadingItem
 import com.dev.moskal.postbrowser.domain.model.Post
 import com.dev.moskal.postbrowser.domain.model.Resource
 import com.dev.moskal.postbrowser.domain.usecase.GetPosts
@@ -30,14 +31,12 @@ class PostListViewModel @ViewModelInject constructor(
 }
 
 data class PostListViewState(
-    val isLoading: Boolean = false,
     val isError: Boolean = false,
     val items: List<PostListItem> = emptyList()
 ) {
-    val isSuccess: Boolean
-        get() = !isLoading && !isError
 
     companion object {
-        val LOADING = PostListViewState(isLoading = true)
+        private const val LOADING_PLACEHOLDER_COUNT = 25
+        val LOADING = PostListViewState(items = List(LOADING_PLACEHOLDER_COUNT) { PostLoadingItem })
     }
 }

@@ -1,6 +1,7 @@
 package com.dev.moskal.postbrowser.app.postlist
 
 
+import com.dev.moskal.postbrowser.app.postlist.PostListViewTypes.TYPE_LOADING
 import com.dev.moskal.postbrowser.app.postlist.PostListViewTypes.TYPE_POST
 import com.dev.moskal.postbrowser.domain.model.Post
 
@@ -21,4 +22,6 @@ sealed class PostListItem(val type: Int) {
             post.body
         )
     }
+
+    object PostLoadingItem : PostListItem(TYPE_LOADING)
 }

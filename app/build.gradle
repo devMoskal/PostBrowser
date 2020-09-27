@@ -55,8 +55,6 @@ dependencies {
 
     // DI
     implementation "com.google.dagger:hilt-android:$hilt_version"
-
-
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
     kapt "androidx.hilt:hilt-compiler:$hilt_androidx_version"
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_androidx_version"
@@ -78,6 +76,9 @@ dependencies {
 
     // Data support
     implementation "com.jakewharton.threetenabp:threetenabp:$threeten_version"
+
+    // UI libs
+    implementation "com.facebook.shimmer:shimmer:$shimmer_version"
 
     // Unit test
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_version"

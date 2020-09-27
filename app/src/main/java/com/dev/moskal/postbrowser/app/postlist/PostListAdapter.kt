@@ -3,6 +3,7 @@ package com.dev.moskal.postbrowser.app.postlist
 import android.view.ViewGroup
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.dev.moskal.postbrowser.app.postlist.PostListViewTypes.TYPE_LOADING
 import com.dev.moskal.postbrowser.app.postlist.PostListViewTypes.TYPE_POST
 import javax.inject.Inject
 
@@ -20,6 +21,7 @@ class PostListAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             TYPE_POST -> PostViewHolder(parent)
+            TYPE_LOADING -> LoadingViewHolder(parent)
             else -> throw IllegalArgumentException("Invalid view type")
         }
     }

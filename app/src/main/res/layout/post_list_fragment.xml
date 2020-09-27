@@ -21,17 +21,6 @@
         android:focusable="true"
         android:animateLayoutChanges="true">
 
-        <androidx.core.widget.ContentLoadingProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="?android:attr/progressBarStyleLarge"
-            android:visibility="@{viewState.isLoading ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <TextView
             android:id="@+id/errorTV"
             android:layout_width="wrap_content"
@@ -47,7 +36,7 @@
             android:id="@+id/emptyTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{(viewState.items.isEmpty()  &amp;&amp; viewState.isSuccess) ? View.VISIBLE : View.GONE}"
+            android:visibility="@{(viewState.items.isEmpty()  &amp;&amp; !viewState.isError) ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -59,7 +48,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:scrollbars="vertical"
-            android:visibility="@{(viewState.isSuccess() &amp;&amp; !viewState.items.isEmpty() ) ? View.VISIBLE : View.GONE}"
+            android:visibility="@{(!viewState.items.isEmpty()) ? View.VISIBLE : View.GONE}"
             app:post_list_items="@{viewState.items}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"

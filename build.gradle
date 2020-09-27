@@ -12,6 +12,8 @@ buildscript {
         recycler_version = '1.1.0'
         cardview_version = '1.0.0'
 
+        shimmer_version = '0.5.0'
+
         hilt_version = '2.28-alpha'
         hilt_androidx_version = '1.0.0-alpha02'
 

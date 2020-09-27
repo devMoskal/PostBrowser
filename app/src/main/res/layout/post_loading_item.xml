@@ -1,17 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<com.facebook.shimmer.ShimmerFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <data>
-
-        <import type="android.view.View" />
-
-        <variable
-            name="item"
-            type="com.dev.moskal.postbrowser.app.postlist.PostListItem.PostItem" />
-
-    </data>
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:duration="1000">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/post_card"
@@ -30,25 +23,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
+            <View
                 android:id="@+id/nameTV"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@{item.title}"
-                android:textStyle="bold"
-                android:layout_marginEnd="@dimen/margin_small"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                android:layout_height="20dp"
+                android:background="@drawable/placeholder"
+                android:layout_marginEnd="@dimen/margin_large"
                 app:layout_constraintEnd_toStartOf="@+id/closeIcon"
-                tools:text="Title 1 very very very very very very very very very very very long" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.appcompat.widget.AppCompatImageButton
+            <View
                 android:id="@+id/closeIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:srcCompat="@drawable/ic_close_24"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@drawable/placeholder"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/nameTV"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -64,15 +53,13 @@
             <TextView
                 android:id="@+id/emailTV"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@{item.email}"
-                android:textSize="@dimen/text_size_large"
-                android:paddingTop="@dimen/margin_small"
+                android:layout_height="20dp"
+                android:layout_marginTop="@dimen/margin_small"
+                android:background="@drawable/placeholder"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/topRow"
-                tools:text="email@superlonglonglongsuperlonglonglongsuperlonglonglong" />
+                app:layout_constraintTop_toBottomOf="@id/topRow" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
-</layout>
+</com.facebook.shimmer.ShimmerFrameLayout>
