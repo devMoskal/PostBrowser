@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.dev.moskal.postbrowser.R
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class PostListFragment : Fragment() {
@@ -22,7 +23,10 @@ class PostListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewModel.toString()
+        viewModel.postList.observe(viewLifecycleOwner) {
+            Timber.i("### $it")
+        }
+
         return inflater.inflate(R.layout.main_fragment, container, false)
     }
 }

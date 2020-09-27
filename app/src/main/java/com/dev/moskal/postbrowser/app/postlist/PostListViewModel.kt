@@ -4,22 +4,23 @@ import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.dev.moskal.postbrowser.domain.repository.PostRepository
-import kotlinx.coroutines.flow.collect
+import com.dev.moskal.postbrowser.domain.usecase.FetchData
+import com.dev.moskal.postbrowser.domain.usecase.GetPosts
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class PostListViewModel @ViewModelInject constructor(
-    private val repo: PostRepository,
+    getPosts: GetPosts,
+    private val fetchData: FetchData,
     @Assisted private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
+    val postList = getPosts.execute().asLiveData()
+
     init {
         viewModelScope.launch {
-            repo.getPosts().collect {
-                Timber.i("$it")
-            }
+            fetchData.execute()
         }
     }
 }

@@ -2,6 +2,6 @@
 <!-- should be done only for debug build -->
 <network-security-config>
     <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">aajsonplaceholder.typicode.com</domain>
+        <domain includeSubdomains="true">jsonplaceholder.typicode.com</domain>
     </domain-config>
 </network-security-config>
