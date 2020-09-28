@@ -8,7 +8,7 @@ import org.junit.jupiter.params.provider.MethodSource
 import java.util.stream.Stream
 
 /**
- * test of each mapper would be very similar
+ * test of each db mapper would be very similar
  *
  * as I would not show any new technology/design other db mapper tests
  * were omitted in sample application due to time constrain
@@ -57,4 +57,3 @@ internal class PostAndUserMapperDbEntityToDomainModelTest {
         }
     }
 }
-

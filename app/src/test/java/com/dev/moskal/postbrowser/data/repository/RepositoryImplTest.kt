@@ -98,7 +98,7 @@ internal class RepositoryImplTest : BaseTest() {
     }
 
     @Nested
-    inner class PostTests() {
+    inner class PostTests {
         @Test
         fun `when post repo returns fix number of post then get all of them`() = runBlockingTest {
             // given
