@@ -10,6 +10,7 @@ import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runBlockingTest
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import retrofit2.HttpException
@@ -23,8 +24,11 @@ internal class PostRepositoryTest : BaseTest() {
     @MockK
     internal lateinit var mockDao: PostBrowserDao
 
-    private val repository by lazy {
-        PostRepository(
+    private lateinit var repository: PostRepository
+
+    @BeforeEach
+    fun init() {
+        repository = PostRepository(
             mockService,
             mockDao
         ) { map { mockk() } }

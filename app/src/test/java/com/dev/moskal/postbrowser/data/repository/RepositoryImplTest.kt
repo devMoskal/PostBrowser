@@ -4,6 +4,7 @@ import com.dev.moskal.postbrowser.BaseTest
 import com.dev.moskal.postbrowser.coCalledOnce
 import com.dev.moskal.postbrowser.coWasNotCalled
 import com.dev.moskal.postbrowser.data.db.PostBrowserDao
+import com.dev.moskal.postbrowser.domain.Repository
 import com.dev.moskal.postbrowser.domain.model.Resource
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
@@ -14,6 +15,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runBlockingTest
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -33,8 +35,11 @@ internal class RepositoryImplTest : BaseTest() {
     internal lateinit var mockDao: PostBrowserDao
 
 
-    private val repository by lazy {
-        RepositoryImpl(
+    private lateinit var repository: Repository
+
+    @BeforeEach
+    fun init() {
+        repository = RepositoryImpl(
             mockDao,
             mockPostRepository,
             mockUserRepository
