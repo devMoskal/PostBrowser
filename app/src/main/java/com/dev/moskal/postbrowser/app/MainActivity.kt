@@ -15,6 +15,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
+        title = resources.getString(R.string.post_list_label)
         if (savedInstanceState == null) {
             viewModel //invoke viewModel lazy initialization
             supportFragmentManager.beginTransaction()
