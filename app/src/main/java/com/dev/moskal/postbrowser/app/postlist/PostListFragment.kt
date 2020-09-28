@@ -36,8 +36,11 @@ class PostListFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        binding.viewState = viewModel.viewState
-        binding.lifecycleOwner = viewLifecycleOwner
+        binding.apply {
+            viewState = viewModel.viewState
+            clickListener = viewModel
+            lifecycleOwner = viewLifecycleOwner
+        }
     }
 
 

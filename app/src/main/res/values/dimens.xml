@@ -4,7 +4,7 @@
     <dimen name="margin_general">16dp</dimen>
     <dimen name="margin_medium">12dp</dimen>
     <dimen name="margin_small">8dp</dimen>
-    <dimen name="margin_tiny">4dp</dimen>
+    <dimen name="margin_tiny">5dp</dimen>
     <dimen name="text_size_large">18sp</dimen>
     <dimen name="text_size_small">12sp</dimen>
 </resources>

@@ -7,9 +7,15 @@
 
         <import type="android.view.View" />
 
+        <import type="com.dev.moskal.postbrowser.app.postlist.PostItemClickListener.Action" />
+
         <variable
             name="item"
             type="com.dev.moskal.postbrowser.app.postlist.PostListItem.PostItem" />
+
+        <variable
+            name="clickListener"
+            type="com.dev.moskal.postbrowser.app.postlist.PostItemClickListener" />
 
     </data>
 
@@ -24,6 +30,7 @@
         android:clickable="true"
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground"
+        android:onClick="@{() ->  clickListener.onClick(item, Action.ITEM_CLICK)}"
         app:contentPadding="@dimen/margin_medium">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -36,6 +43,7 @@
                 android:layout_height="wrap_content"
                 android:text="@{item.title}"
                 android:textStyle="bold"
+                android:textSize="@dimen/text_size_large"
                 android:layout_marginEnd="@dimen/margin_small"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -46,9 +54,9 @@
                 android:id="@+id/closeIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:background="?attr/selectableItemBackgroundBorderless"
                 app:srcCompat="@drawable/ic_close_24"
+                android:onClick="@{() ->  clickListener.onClick(item, Action.DELETE_CLICK)}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/nameTV"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -66,7 +74,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@{item.email}"
-                android:textSize="@dimen/text_size_large"
                 android:paddingTop="@dimen/margin_small"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

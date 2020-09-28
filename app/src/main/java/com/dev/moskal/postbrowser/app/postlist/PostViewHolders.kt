@@ -18,8 +18,9 @@ internal class PostViewHolder(
     )
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(item: PostListItem.PostItem) {
+    fun bind(item: PostListItem.PostItem, clickListener: PostItemClickListener) {
         binding.item = item
+        binding.clickListener = clickListener
     }
 }
 

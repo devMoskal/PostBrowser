@@ -15,6 +15,7 @@ import javax.inject.Inject
  */
 class PostListAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var items: List<PostListItem> = emptyList()
+    private lateinit var clickListener: PostItemClickListener
 
     override fun getItemCount() = items.size
 
@@ -29,7 +30,8 @@ class PostListAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is PostViewHolder -> holder.bind(
-                items[position] as PostListItem.PostItem
+                items[position] as PostListItem.PostItem,
+                clickListener
             )
         }
     }
@@ -54,6 +56,17 @@ class PostListAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.
             items?.let {
                 (adapter as PostListAdapter).update(items)
             }
+        }
+
+        /**
+         * DataBinding adapter for returning click events from [PostListAdapter]
+         *
+         * @param clickListener hook to notify about clicked item
+         */
+        @JvmStatic
+        @BindingAdapter("click_listener")
+        fun RecyclerView.bindClickListener(clickListener: PostItemClickListener) {
+            (adapter as PostListAdapter).clickListener = clickListener
         }
     }
 }

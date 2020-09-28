@@ -13,6 +13,11 @@
         <variable
             name="viewState"
             type="LiveData&lt;PostListViewState&gt;" />
+
+        <variable
+            name="clickListener"
+            type="com.dev.moskal.postbrowser.app.postlist.PostItemClickListener" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -50,6 +55,7 @@
             android:scrollbars="vertical"
             android:visibility="@{(!viewState.items.isEmpty()) ? View.VISIBLE : View.GONE}"
             app:post_list_items="@{viewState.items}"
+            app:click_listener="@{clickListener}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
