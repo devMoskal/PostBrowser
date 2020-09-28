@@ -3,4 +3,5 @@
     <string name="post_list_label">Challenge Accepted!</string>
     <string name="error">Oops, something went wrong</string>
     <string name="empty_list">No data found</string>
+    <string name="unable_to_delete_post">Failed to delete post, try again later</string>
 </resources>

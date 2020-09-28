@@ -6,6 +6,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.dev.moskal.postbrowser.app.postlist.PostItemClickListener.Action.DELETE_CLICK
 import com.dev.moskal.postbrowser.app.postlist.PostItemClickListener.Action.ITEM_CLICK
+import com.dev.moskal.postbrowser.app.util.SingleLiveEvent
 import com.dev.moskal.postbrowser.domain.model.PostInfo
 import com.dev.moskal.postbrowser.domain.model.Resource
 import com.dev.moskal.postbrowser.domain.usecase.DeletePost
@@ -25,6 +26,10 @@ class PostListViewModel @ViewModelInject constructor(
         .onStart { emit(PostListViewState.LOADING) }
         .asLiveData()
 
+    private val _alerts = SingleLiveEvent<PostListViewAlerts>()
+    val alerts: SingleLiveEvent<PostListViewAlerts>
+        get() = _alerts
+
     override fun onClick(item: PostListItem.PostItem, action: PostItemClickListener.Action) {
         when (action) {
             ITEM_CLICK -> Timber.i("### onClick $item")
@@ -35,6 +40,9 @@ class PostListViewModel @ViewModelInject constructor(
     private fun handleDeleteClick(item: PostListItem.PostItem) {
         viewModelScope.launch {
             val result = deletePost.execute(item.id)
+            if (result is Resource.Error) {
+                _alerts.value = PostListViewAlerts.FAILED_TO_DELETE
+            }
         }
     }
 

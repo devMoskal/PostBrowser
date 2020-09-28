@@ -4,10 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dev.moskal.postbrowser.R
 import com.dev.moskal.postbrowser.databinding.PostListFragmentBinding
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -41,8 +44,22 @@ class PostListFragment : Fragment() {
             clickListener = viewModel
             lifecycleOwner = viewLifecycleOwner
         }
+        viewModel.alerts.observe(viewLifecycleOwner) {
+            when (it) {
+                PostListViewAlerts.FAILED_TO_DELETE -> showSnackbar(R.string.unable_to_delete_post)
+            }
+        }
     }
 
+    private fun showSnackbar(@StringRes stringRes: Int) {
+        activity?.apply {
+            Snackbar.make(
+                findViewById(android.R.id.content),
+                getString(stringRes),
+                Snackbar.LENGTH_SHORT
+            ).show()
+        }
+    }
 
     private fun setupRecyclerView() {
         with(binding.recyclerView) {

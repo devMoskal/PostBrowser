@@ -11,3 +11,7 @@ data class PostListViewState(
             PostListViewState(items = List(LOADING_PLACEHOLDER_COUNT) { PostListItem.PostLoadingItem })
     }
 }
+
+enum class PostListViewAlerts {
+    FAILED_TO_DELETE
+}
