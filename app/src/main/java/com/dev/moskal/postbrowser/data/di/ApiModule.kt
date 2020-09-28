@@ -4,6 +4,7 @@ package com.dev.moskal.postbrowser.data.di
 import com.dev.moskal.postbrowser.BuildConfig
 import com.dev.moskal.postbrowser.data.network.api.API_ENDPOINT
 import com.dev.moskal.postbrowser.data.network.api.PostApi
+import com.dev.moskal.postbrowser.data.network.api.UserApi
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -23,7 +24,11 @@ class ApiModule {
 
     @Provides
     @Singleton
-    internal fun provideWorkApi(retrofit: Retrofit) = retrofit.create(PostApi::class.java)
+    internal fun providePostApi(retrofit: Retrofit) = retrofit.create(PostApi::class.java)
+
+    @Provides
+    @Singleton
+    internal fun provideUserApi(retrofit: Retrofit) = retrofit.create(UserApi::class.java)
 
     @Provides
     @Singleton

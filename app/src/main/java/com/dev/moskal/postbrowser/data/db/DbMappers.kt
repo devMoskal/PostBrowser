@@ -1,11 +1,7 @@
 package com.dev.moskal.postbrowser.data.db
 
-import com.dev.moskal.postbrowser.domain.model.Post
+import com.dev.moskal.postbrowser.domain.model.PostInfo
 
-fun List<Post>.mapPostDomainModelToDbEntity(): List<DbPost> = map {
-    DbPost(it.id, it.userId, it.title, it.body)
-}
-
-fun List<DbPost>.mapPostDbEntityToDomainModel(): List<Post> = map {
-    Post(it.id, it.userId, it.title, it.body)
+fun List<DbPostAndUser>.mapPostAndUserDbEntityToDomainModel(): List<PostInfo> = map {
+    PostInfo(it.post.postId, it.post.title, it.user.email)
 }

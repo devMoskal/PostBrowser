@@ -1,8 +1,7 @@
 package com.dev.moskal.postbrowser.domain.model
 
-data class Post(
+data class PostInfo(
     val id: Int,
-    val userId: Int,
     val title: String,
-    val body: String,
+    val userEmail: String,
 )

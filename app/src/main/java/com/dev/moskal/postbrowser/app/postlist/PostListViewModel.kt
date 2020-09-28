@@ -4,35 +4,34 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.dev.moskal.postbrowser.app.postlist.PostListItem.PostLoadingItem
-import com.dev.moskal.postbrowser.domain.model.Post
+import com.dev.moskal.postbrowser.domain.model.PostInfo
 import com.dev.moskal.postbrowser.domain.model.Resource
-import com.dev.moskal.postbrowser.domain.usecase.GetPosts
+import com.dev.moskal.postbrowser.domain.usecase.GetPostsInfo
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 
 class PostListViewModel @ViewModelInject constructor(
-    getPosts: GetPosts
+    getPostsInfoInfo: GetPostsInfo
 ) : ViewModel() {
 
-    val viewState = getPosts.execute()
+    val viewState = getPostsInfoInfo.execute()
         .map(::reducePostListToViewState)
         .onStart { emit(PostListViewState.LOADING) }
         .asLiveData()
 
-    private fun reducePostListToViewState(it: Resource<List<Post>>) =
-        when (it) {
-            is Resource.Success -> PostListViewState(items = it.data?.map { post ->
-                PostListItem.PostItem(
-                    post
-                )
-            } ?: emptyList())
+    private fun reducePostListToViewState(resource: Resource<List<PostInfo>>) =
+        when (resource) {
+            is Resource.Success -> PostListViewState(resource.toItemsList())
             is Resource.Error -> PostListViewState(isError = true)
         }
+
+    private fun Resource.Success<List<PostInfo>>.toItemsList() =
+        data?.map(PostListItem::PostItem) ?: emptyList()
 }
 
 data class PostListViewState(
+    val items: List<PostListItem> = emptyList(),
     val isError: Boolean = false,
-    val items: List<PostListItem> = emptyList()
 ) {
 
     companion object {

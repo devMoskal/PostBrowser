@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 
 private const val DB_NAME = "post_browser_database"
 
-@Database(entities = [(DbPost::class)], version = 1)
+@Database(entities = [(DbPost::class), (DbUser::class)], version = 1)
 abstract class PostBrowserDatabase : RoomDatabase() {
 
     abstract fun postBrowserDao(): PostBrowserDao
@@ -23,5 +23,6 @@ abstract class PostBrowserDatabase : RoomDatabase() {
         }
 
         internal const val TABLE_POST = "post_table"
+        internal const val TABLE_USERS = "user_table"
     }
 }

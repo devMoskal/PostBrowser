@@ -26,6 +26,9 @@ internal class RepositoryImplTest : BaseTest() {
     @MockK
     internal lateinit var mockPostRepository: PostRepository
 
+    @MockK
+    internal lateinit var mockUserRepository: UserRepository
+
     @RelaxedMockK
     internal lateinit var mockDao: PostBrowserDao
 
@@ -33,8 +36,11 @@ internal class RepositoryImplTest : BaseTest() {
     private val repository by lazy {
         RepositoryImpl(
             mockDao,
-            mockPostRepository
-        )
+            mockPostRepository,
+            mockUserRepository
+        ) {
+            map { mockk() }
+        }
     }
 
     @Nested
@@ -44,33 +50,49 @@ internal class RepositoryImplTest : BaseTest() {
             runBlockingTest {
                 // given
                 coEvery { mockPostRepository.fetchData() } returns mockk()
+                coEvery { mockUserRepository.fetchData() } returns mockk()
                 // when
                 val result = repository.fetchData()
                 // then
                 assertThat(result).isInstanceOf(Resource.Success::class.java)
-                coCalledOnce { mockDao.batchUpdate(any()) }
+                coCalledOnce { mockDao.batchUpdate(any(), any()) }
             }
 
         @Test
         fun `when post repository fetched fails then do not update database`() = runBlockingTest {
             // given
             coEvery { mockPostRepository.fetchData() } throws HttpException(mockk(relaxed = true))
+            coEvery { mockUserRepository.fetchData() } returns mockk()
             // when
             val result = repository.fetchData()
             // then
             assertThat(result).isInstanceOf(Resource.Error::class.java)
-            coWasNotCalled { mockDao.batchUpdate(any()) }
+            coWasNotCalled { mockDao.batchUpdate(any(), any()) }
+        }
+
+        @Test
+        fun `when user repository fetched fails then do not update database`() = runBlockingTest {
+            // given
+            coEvery { mockPostRepository.fetchData() } returns mockk()
+            coEvery { mockUserRepository.fetchData() } throws HttpException(mockk(relaxed = true))
+
+            // when
+            val result = repository.fetchData()
+            // then
+            assertThat(result).isInstanceOf(Resource.Error::class.java)
+            coWasNotCalled { mockDao.batchUpdate(any(), any()) }
         }
 
         @Test
         fun `when dto update fails then propagate error`() = runBlockingTest {
             // given
             coEvery { mockPostRepository.fetchData() } returns mockk()
-            coEvery { mockDao.batchUpdate(any()) } throws RuntimeException()
+            coEvery { mockUserRepository.fetchData() } returns mockk()
+            coEvery { mockDao.batchUpdate(any(), any()) } throws RuntimeException()
             // when
             val result = repository.fetchData()
             // then
-            coCalledOnce { mockDao.batchUpdate(any()) }
+            coCalledOnce { mockDao.batchUpdate(any(), any()) }
             assertThat(result).isInstanceOf(Resource.Error::class.java)
         }
     }
@@ -80,7 +102,7 @@ internal class RepositoryImplTest : BaseTest() {
         @Test
         fun `when post repo returns fix number of post then get all of them`() = runBlockingTest {
             // given
-            every { mockPostRepository.getPosts() } returns flowOf(
+            every { mockPostRepository.getPostsInfo() } returns flowOf(
                 listOf(
                     mockk(relaxed = true),
                     mockk(relaxed = true)
@@ -99,7 +121,7 @@ internal class RepositoryImplTest : BaseTest() {
         @Test
         fun `when post repo emits several responses then get all of them`() = runBlockingTest {
             // given
-            every { mockPostRepository.getPosts() } returns flowOf(
+            every { mockPostRepository.getPostsInfo() } returns flowOf(
                 listOf(mockk(relaxed = true), mockk(relaxed = true)),
                 listOf(mockk(relaxed = true), mockk(relaxed = true)),
                 listOf(mockk(relaxed = true)),
@@ -117,7 +139,7 @@ internal class RepositoryImplTest : BaseTest() {
         @Test
         fun `when dao throws error then propagate error response`() {
             // given
-            coEvery { mockPostRepository.getPosts() } throws RuntimeException("")
+            coEvery { mockPostRepository.getPostsInfo() } throws RuntimeException("")
 
             // then
             assertThrows<RuntimeException> {

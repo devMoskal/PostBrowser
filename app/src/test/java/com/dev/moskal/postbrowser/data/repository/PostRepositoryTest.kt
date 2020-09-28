@@ -1,9 +1,9 @@
 package com.dev.moskal.postbrowser.data.repository
 
 import com.dev.moskal.postbrowser.BaseTest
+import com.dev.moskal.postbrowser.data.db.DbPostAndUser
 import com.dev.moskal.postbrowser.data.db.PostBrowserDao
 import com.dev.moskal.postbrowser.data.network.api.PostApi
-import com.dev.moskal.postbrowser.domain.model.Post
 import com.google.common.truth.Truth.assertThat
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
@@ -26,11 +26,8 @@ internal class PostRepositoryTest : BaseTest() {
     private val repository by lazy {
         PostRepository(
             mockService,
-            mockDao,
-            { map { mockk() } },
-            { map { mockk() } },
-            { map { mockk() } },
-        )
+            mockDao
+        ) { map { mockk() } }
     }
 
     @Test
@@ -72,7 +69,7 @@ internal class PostRepositoryTest : BaseTest() {
     @Test
     fun `when dao returns fix number of post then get all of them`() = runBlockingTest {
         // given
-        every { mockDao.getPosts() } returns flowOf(
+        every { mockDao.getPostsInfo() } returns flowOf(
             listOf(
                 mockk(relaxed = true),
                 mockk(relaxed = true)
@@ -80,17 +77,17 @@ internal class PostRepositoryTest : BaseTest() {
         )
 
         // when
-        val posts = repository.getPosts().toList()
+        val posts = repository.getPostsInfo().toList()
 
         // then
         assertThat(posts).isNotEmpty()
-        assertThat(posts[0][0]).isInstanceOf(Post::class.java)
+        assertThat(posts[0][0]).isInstanceOf(DbPostAndUser::class.java)
     }
 
     @Test
     fun `when dao emits several responses then get all of them`() = runBlockingTest {
         // given
-        every { mockDao.getPosts() } returns flowOf(
+        every { mockDao.getPostsInfo() } returns flowOf(
             listOf(mockk(relaxed = true), mockk(relaxed = true)),
             listOf(mockk(relaxed = true), mockk(relaxed = true)),
             listOf(mockk(relaxed = true)),
@@ -99,7 +96,7 @@ internal class PostRepositoryTest : BaseTest() {
         )
 
         // when
-        val posts = repository.getPosts().toList()
+        val posts = repository.getPostsInfo().toList()
 
         // then
         assertThat(posts).hasSize(5)
@@ -113,7 +110,7 @@ internal class PostRepositoryTest : BaseTest() {
         // then
         assertThrows<RuntimeException> {
             runBlockingTest {
-                repository.getPosts().toList()
+                repository.getPostsInfo().toList()
             }
         }
     }

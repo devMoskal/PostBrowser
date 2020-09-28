@@ -4,22 +4,13 @@ import com.dev.moskal.postbrowser.data.db.DbPost
 import com.dev.moskal.postbrowser.data.db.PostBrowserDao
 import com.dev.moskal.postbrowser.data.network.api.PostApi
 import com.dev.moskal.postbrowser.data.network.response.PostApiResponse
-import com.dev.moskal.postbrowser.domain.model.Post
-import kotlinx.coroutines.flow.map
 
 class PostRepository constructor(
     private val postApi: PostApi,
     private val dao: PostBrowserDao,
-    private val mapApiResponseToDomainModel: List<PostApiResponse>.() -> List<Post>,
-    private val mapDomainModelToDbEntity: List<Post>.() -> List<DbPost>,
-    private val mapDbEntityToDomainModel: List<DbPost>.() -> List<Post>,
+    private val mapApiResponseToDbEntity: List<PostApiResponse>.() -> List<DbPost>,
 ) {
-    suspend fun fetchData(): List<DbPost> =
-        postApi.getPosts()
-            .mapApiResponseToDomainModel()
-            .mapDomainModelToDbEntity()
+    suspend fun fetchData(): List<DbPost> = postApi.getPosts().mapApiResponseToDbEntity()
 
-    fun getPosts() =
-        dao.getPosts()
-            .map(mapDbEntityToDomainModel::invoke)
+    fun getPostsInfo() = dao.getPostsInfo()
 }

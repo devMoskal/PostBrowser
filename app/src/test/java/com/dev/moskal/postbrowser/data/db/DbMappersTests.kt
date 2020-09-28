@@ -1,7 +1,5 @@
 package com.dev.moskal.postbrowser.data.db
 
-import com.dev.moskal.postbrowser.data.network.mapper.PostMapperApiResponseToDomainModelTest
-
 /**
  * test would be very similar to [PostMapperApiResponseToDomainModelTest]
  *
