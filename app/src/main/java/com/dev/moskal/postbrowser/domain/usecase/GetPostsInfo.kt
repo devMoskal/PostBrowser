@@ -18,5 +18,5 @@ class GetPostsInfo @Inject constructor(
     fun execute(): Flow<Resource<List<PostInfo>>> =
         fetchData.syncState
             .filterNot { it == SyncState.NOT_STARTED || it == SyncState.IN_PROGRESS }
-            .flatMapLatest { repository.getPosts() }
+            .flatMapLatest { repository.getPostsInfo() }
 }

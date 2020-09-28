@@ -2,6 +2,8 @@ package com.dev.moskal.postbrowser.app.postlist
 
 import android.view.ViewGroup
 import androidx.databinding.BindingAdapter
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.dev.moskal.postbrowser.app.postlist.PostListViewTypes.TYPE_LOADING
 import com.dev.moskal.postbrowser.app.postlist.PostListViewTypes.TYPE_POST
@@ -13,11 +15,9 @@ import javax.inject.Inject
  * Both [items] are provided via DataBinding,
  * using custom adapter implemented in companion object
  */
-class PostListAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private var items: List<PostListItem> = emptyList()
+class PostListAdapter @Inject constructor() :
+    ListAdapter<PostListItem, RecyclerView.ViewHolder>(PostListDiffUtil()) {
     private lateinit var clickListener: PostItemClickListener
-
-    override fun getItemCount() = items.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -30,21 +30,19 @@ class PostListAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is PostViewHolder -> holder.bind(
-                items[position] as PostListItem.PostItem,
+                getItem(position) as PostListItem.PostItem,
                 clickListener
             )
         }
     }
 
-    override fun getItemViewType(position: Int) = items[position].type
+    override fun getItemViewType(position: Int) = getItem(position).type
 
     private fun update(items: List<PostListItem>) {
-        this.items = items
-        notifyDataSetChanged()
+        submitList(items)
     }
 
     companion object {
-
         /**
          * DataBinding adapter used to retrieve posts items
          *
@@ -71,3 +69,15 @@ class PostListAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.
     }
 }
 
+class PostListDiffUtil : DiffUtil.ItemCallback<PostListItem>() {
+    override fun areItemsTheSame(oldItem: PostListItem, newItem: PostListItem) =
+        when (oldItem) {
+            is PostListItem.PostItem -> newItem is PostListItem.PostItem && oldItem.id == newItem.id
+            PostListItem.PostLoadingItem -> newItem is PostListItem.PostLoadingItem
+        }
+
+    override fun areContentsTheSame(
+        oldItem: PostListItem,
+        newItem: PostListItem
+    ) = oldItem == newItem
+}

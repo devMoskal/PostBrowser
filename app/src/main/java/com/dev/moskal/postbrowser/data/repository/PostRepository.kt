@@ -13,4 +13,6 @@ class PostRepository constructor(
     suspend fun fetchData(): List<DbPost> = postApi.getPosts().mapApiResponseToDbEntity()
 
     fun getPostsInfo() = dao.getPostsInfo()
+
+    suspend fun delete(id: Int) = dao.deletePost(id)
 }

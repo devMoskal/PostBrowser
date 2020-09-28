@@ -6,5 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface Repository {
     suspend fun fetchData(): Resource<Unit>
-    fun getPosts(): Flow<Resource<List<PostInfo>>>
+    suspend fun deletePost(id: Int): Resource<Unit>
+    fun getPostsInfo(): Flow<Resource<List<PostInfo>>>
 }

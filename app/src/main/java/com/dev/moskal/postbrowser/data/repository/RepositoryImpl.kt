@@ -6,9 +6,8 @@ import com.dev.moskal.postbrowser.data.db.DbPostWithUser
 import com.dev.moskal.postbrowser.data.db.PostBrowserDao
 import com.dev.moskal.postbrowser.domain.Repository
 import com.dev.moskal.postbrowser.domain.model.PostInfo
-import com.dev.moskal.postbrowser.domain.model.Resource
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
+import com.dev.moskal.postbrowser.domain.model.asResource
+import com.dev.moskal.postbrowser.domain.model.asResourceFlow
 import kotlinx.coroutines.flow.map
 
 class RepositoryImpl(
@@ -22,23 +21,17 @@ class RepositoryImpl(
      * Batch update to db is preventing form having a corrupted db
      * when some api call or db insertion fails
      */
-    override suspend fun fetchData() =
-        try {
-            val posts = postRepository.fetchData()
-            val users = userRepository.fetchData()
-            dao.batchUpdate(posts, users)
-            Resource.Success(Unit)
-        } catch (error: Throwable) {
-            Resource.Error(error)
-        }
+    override suspend fun fetchData() = asResource {
+        val posts = postRepository.fetchData()
+        val users = userRepository.fetchData()
+        dao.batchUpdate(posts, users)
+    }
 
-    override fun getPosts() = postRepository.getPostsInfo()
+    override fun getPostsInfo() = postRepository.getPostsInfo()
         .map(mapPostInfoDbEntityToDomainModelWithUser::invoke)
-        .toResourceFlow()
+        .asResourceFlow()
 
-    private fun <T> Flow<T>.toResourceFlow(): Flow<Resource<T>> = this
-        .map { Resource.Success(it) as Resource<T> }
-        .catch {
-            emit(Resource.Error(it))
-        }
+    override suspend fun deletePost(id: Int) = asResource {
+        postRepository.delete(id)
+    }
 }

@@ -14,7 +14,7 @@ import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -22,7 +22,6 @@ import org.junit.jupiter.api.assertThrows
 import retrofit2.HttpException
 
 
-@Suppress("EXPERIMENTAL_API_USAGE")
 internal class RepositoryImplTest : BaseTest() {
 
     @MockK
@@ -52,7 +51,7 @@ internal class RepositoryImplTest : BaseTest() {
     inner class FetchDataTests {
         @Test
         fun `when all repository fetched data without errors then batch update database`() =
-            runBlockingTest {
+            runBlocking {
                 // given
                 coEvery { mockPostRepository.fetchData() } returns mockk()
                 coEvery { mockUserRepository.fetchData() } returns mockk()
@@ -64,7 +63,7 @@ internal class RepositoryImplTest : BaseTest() {
             }
 
         @Test
-        fun `when post repository fetched fails then do not update database`() = runBlockingTest {
+        fun `when post repository fetched fails then do not update database`() = runBlocking {
             // given
             coEvery { mockPostRepository.fetchData() } throws HttpException(mockk(relaxed = true))
             coEvery { mockUserRepository.fetchData() } returns mockk()
@@ -76,7 +75,7 @@ internal class RepositoryImplTest : BaseTest() {
         }
 
         @Test
-        fun `when user repository fetched fails then do not update database`() = runBlockingTest {
+        fun `when user repository fetched fails then do not update database`() = runBlocking {
             // given
             coEvery { mockPostRepository.fetchData() } returns mockk()
             coEvery { mockUserRepository.fetchData() } throws HttpException(mockk(relaxed = true))
@@ -89,7 +88,7 @@ internal class RepositoryImplTest : BaseTest() {
         }
 
         @Test
-        fun `when dto update fails then propagate error`() = runBlockingTest {
+        fun `when dto update fails then propagate error`() = runBlocking {
             // given
             coEvery { mockPostRepository.fetchData() } returns mockk()
             coEvery { mockUserRepository.fetchData() } returns mockk()
@@ -105,7 +104,7 @@ internal class RepositoryImplTest : BaseTest() {
     @Nested
     inner class PostTests {
         @Test
-        fun `when post repo returns fix number of post then get all of them`() = runBlockingTest {
+        fun `when post repo returns fix number of post then get all of them`() = runBlocking {
             // given
             every { mockPostRepository.getPostsInfo() } returns flowOf(
                 listOf(
@@ -115,7 +114,7 @@ internal class RepositoryImplTest : BaseTest() {
             )
 
             // when
-            val posts = repository.getPosts().toList()
+            val posts = repository.getPostsInfo().toList()
 
             // then
             assertThat(posts).isNotEmpty()
@@ -124,7 +123,7 @@ internal class RepositoryImplTest : BaseTest() {
         }
 
         @Test
-        fun `when post repo emits several responses then get all of them`() = runBlockingTest {
+        fun `when post repo emits several responses then get all of them`() = runBlocking {
             // given
             every { mockPostRepository.getPostsInfo() } returns flowOf(
                 listOf(mockk(relaxed = true), mockk(relaxed = true)),
@@ -135,7 +134,7 @@ internal class RepositoryImplTest : BaseTest() {
             )
 
             // when
-            val posts = repository.getPosts().toList()
+            val posts = repository.getPostsInfo().toList()
 
             // then
             assertThat(posts).hasSize(5)
@@ -148,8 +147,8 @@ internal class RepositoryImplTest : BaseTest() {
 
             // then
             assertThrows<RuntimeException> {
-                runBlockingTest {
-                    repository.getPosts().toList()
+                runBlocking {
+                    repository.getPostsInfo().toList()
                 }
             }
         }
