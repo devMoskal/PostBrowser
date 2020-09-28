@@ -18,7 +18,7 @@ internal class PostAndUserMapperDbEntityToDomainModelTest {
     @ParameterizedTest(name = "{0} should be map to {1}")
     @MethodSource("provideTestData")
     fun `when map db entity then proper domain model should be returned`(
-        input: List<DbPostAndUser>,
+        input: List<DbPostWithUser>,
         expected: List<PostInfo>
     ) {
         //when
@@ -32,19 +32,25 @@ internal class PostAndUserMapperDbEntityToDomainModelTest {
         @JvmStatic
         fun provideTestData(): Stream<Arguments?>? {
             return Stream.of(
-                Arguments.of(emptyList<DbPostAndUser>(), emptyList<PostInfo>()),
+                Arguments.of(emptyList<DbPostWithUser>(), emptyList<PostInfo>()),
 
                 Arguments.of(
-                    listOf(DbPostAndUser(DbUser(101, "email1"), DbPost(1, 11, "test1", "body1"))),
+                    listOf(DbPostWithUser(DbPost(1, 11, "test1", "body1"), DbUser(101, "email1"))),
                     listOf(PostInfo(1, "test1", "email1"))
 
                 ),
 
                 Arguments.of(
+                    listOf(DbPostWithUser(DbPost(1, 11, "test1", "body1"), null)),
+                    listOf(PostInfo(1, "test1", ""))
+                ),
+
+
+                Arguments.of(
                     listOf(
-                        DbPostAndUser(DbUser(101, "email1"), DbPost(1, 11, "test1", "body1")),
-                        DbPostAndUser(DbUser(102, "email2"), DbPost(2, 12, "test2", "body2")),
-                        DbPostAndUser(DbUser(103, "email3"), DbPost(3, 13, "test3", "body3")),
+                        DbPostWithUser(DbPost(1, 11, "test1", "body1"), DbUser(101, "email1")),
+                        DbPostWithUser(DbPost(2, 12, "test2", "body2"), DbUser(102, "email2")),
+                        DbPostWithUser(DbPost(3, 13, "test3", "body3"), DbUser(103, "email3")),
 
                         ),
                     listOf(

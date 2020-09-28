@@ -1,7 +1,7 @@
 package com.dev.moskal.postbrowser.data.repository
 
 import com.dev.moskal.postbrowser.BaseTest
-import com.dev.moskal.postbrowser.data.db.DbPostAndUser
+import com.dev.moskal.postbrowser.data.db.DbPostWithUser
 import com.dev.moskal.postbrowser.data.db.PostBrowserDao
 import com.dev.moskal.postbrowser.data.network.api.PostApi
 import com.google.common.truth.Truth.assertThat
@@ -85,7 +85,7 @@ internal class PostRepositoryTest : BaseTest() {
 
         // then
         assertThat(posts).isNotEmpty()
-        assertThat(posts[0][0]).isInstanceOf(DbPostAndUser::class.java)
+        assertThat(posts[0][0]).isInstanceOf(DbPostWithUser::class.java)
     }
 
     @Test

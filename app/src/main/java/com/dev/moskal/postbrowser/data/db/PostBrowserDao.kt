@@ -1,7 +1,7 @@
 package com.dev.moskal.postbrowser.data.db
 
 import androidx.room.*
-import com.dev.moskal.postbrowser.data.db.PostBrowserDatabase.Companion.TABLE_USERS
+import com.dev.moskal.postbrowser.data.db.PostBrowserDatabase.Companion.TABLE_POST
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -20,6 +20,6 @@ interface PostBrowserDao {
     suspend fun insertUsers(posts: List<DbUser>)
 
     @Transaction
-    @Query("SELECT * FROM $TABLE_USERS")
-    fun getPostsInfo(): Flow<List<DbPostAndUser>>
+    @Query("SELECT * FROM $TABLE_POST")
+    fun getPostsInfo(): Flow<List<DbPostWithUser>>
 }

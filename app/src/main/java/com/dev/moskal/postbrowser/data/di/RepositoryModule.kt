@@ -1,7 +1,7 @@
 package com.dev.moskal.postbrowser.data.di
 
 
-import com.dev.moskal.postbrowser.data.db.DbPostAndUser
+import com.dev.moskal.postbrowser.data.db.DbPostWithUser
 import com.dev.moskal.postbrowser.data.db.PostBrowserDao
 import com.dev.moskal.postbrowser.data.db.mapPostAndUserDbEntityToDomainModel
 import com.dev.moskal.postbrowser.data.network.api.PostApi
@@ -34,7 +34,7 @@ class RepositoryModule {
         dao,
         postRepository,
         userRepository,
-        List<DbPostAndUser>::mapPostAndUserDbEntityToDomainModel
+        List<DbPostWithUser>::mapPostAndUserDbEntityToDomainModel
     )
 
     @Provides

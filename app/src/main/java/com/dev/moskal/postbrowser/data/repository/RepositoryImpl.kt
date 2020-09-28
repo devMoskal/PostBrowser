@@ -2,7 +2,7 @@
 
 package com.dev.moskal.postbrowser.data.repository
 
-import com.dev.moskal.postbrowser.data.db.DbPostAndUser
+import com.dev.moskal.postbrowser.data.db.DbPostWithUser
 import com.dev.moskal.postbrowser.data.db.PostBrowserDao
 import com.dev.moskal.postbrowser.domain.Repository
 import com.dev.moskal.postbrowser.domain.model.PostInfo
@@ -15,7 +15,7 @@ class RepositoryImpl(
     private val dao: PostBrowserDao,
     private val postRepository: PostRepository,
     private val userRepository: UserRepository,
-    private val mapPostInfoDbEntityToDomainModelAndUser: List<DbPostAndUser>.() -> List<PostInfo>
+    private val mapPostInfoDbEntityToDomainModelWithUser: List<DbPostWithUser>.() -> List<PostInfo>
 ) : Repository {
 
     /*
@@ -33,7 +33,7 @@ class RepositoryImpl(
         }
 
     override fun getPosts() = postRepository.getPostsInfo()
-        .map(mapPostInfoDbEntityToDomainModelAndUser::invoke)
+        .map(mapPostInfoDbEntityToDomainModelWithUser::invoke)
         .toResourceFlow()
 
     private fun <T> Flow<T>.toResourceFlow(): Flow<Resource<T>> = this
