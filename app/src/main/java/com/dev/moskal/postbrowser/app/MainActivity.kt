@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.main_activity)
         title = resources.getString(R.string.post_list_label)
         if (savedInstanceState == null) {
-            viewModel //invoke viewModel lazy initialization
+            viewModel //enforce viewModel lazy initialization
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, PostListFragment.newInstance())
                 .commitNow()

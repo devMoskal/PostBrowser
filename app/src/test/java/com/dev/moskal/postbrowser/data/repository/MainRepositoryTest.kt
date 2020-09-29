@@ -22,7 +22,7 @@ import org.junit.jupiter.api.assertThrows
 import retrofit2.HttpException
 
 
-internal class RepositoryImplTest : BaseTest() {
+internal class MainRepositoryTest : BaseTest() {
 
     @MockK
     internal lateinit var mockPostRepository: PostRepository
@@ -38,7 +38,7 @@ internal class RepositoryImplTest : BaseTest() {
 
     @BeforeEach
     fun init() {
-        repository = RepositoryImpl(
+        repository = MainRepository(
             mockDao,
             mockPostRepository,
             mockUserRepository

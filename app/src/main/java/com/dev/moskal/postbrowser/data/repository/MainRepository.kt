@@ -8,23 +8,32 @@ import com.dev.moskal.postbrowser.domain.Repository
 import com.dev.moskal.postbrowser.domain.model.PostInfo
 import com.dev.moskal.postbrowser.domain.model.asResource
 import com.dev.moskal.postbrowser.domain.model.asResourceFlow
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 
-class RepositoryImpl(
+internal class MainRepository(
     private val dao: PostBrowserDao,
     private val postRepository: PostRepository,
     private val userRepository: UserRepository,
+    private val photosRepository: PhotosRepository,
+    private val albumRepository: AlbumRepository,
     private val mapPostInfoDbEntityToDomainModelWithUser: List<DbPostWithUser>.() -> List<PostInfo>
 ) : Repository {
 
     /*
      * Batch update to db is preventing form having a corrupted db
-     * when some api call or db insertion fails
+     * when one of the api call or db insertion fails.
      */
     override suspend fun fetchData() = asResource {
-        val posts = postRepository.fetchData()
-        val users = userRepository.fetchData()
-        dao.batchUpdate(posts, users)
+        withContext(Dispatchers.IO) {
+            val posts = async { postRepository.fetchData() }
+            val users = async { userRepository.fetchData() }
+            val albums = async { albumRepository.fetchData() }
+            val photos = async { photosRepository.fetchData() }
+            dao.batchUpdate(posts.await(), users.await(), albums.await(), photos.await())
+        }
     }
 
     override fun getPostsInfo() = postRepository.getPostsInfo()

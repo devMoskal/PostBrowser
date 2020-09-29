@@ -5,7 +5,7 @@ import com.dev.moskal.postbrowser.data.db.PostBrowserDao
 import com.dev.moskal.postbrowser.data.network.api.PostApi
 import com.dev.moskal.postbrowser.data.network.response.PostApiResponse
 
-class PostRepository constructor(
+internal class PostRepository constructor(
     private val postApi: PostApi,
     private val dao: PostBrowserDao,
     private val mapApiResponseToDbEntity: List<PostApiResponse>.() -> List<DbPost>,

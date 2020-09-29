@@ -21,7 +21,7 @@ sealed class Resource<T>(val data: T? = null) {
 }
 
 suspend fun <T : Any> asResource(
-    dispatcher: CoroutineDispatcher = Dispatchers.Main,
+    dispatcher: CoroutineDispatcher = Dispatchers.IO,
     block: suspend () -> T
 ): Resource<T> = withContext(dispatcher) {
     try {
