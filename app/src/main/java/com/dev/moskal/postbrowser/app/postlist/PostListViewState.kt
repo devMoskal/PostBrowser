@@ -12,6 +12,7 @@ data class PostListViewState(
     }
 }
 
-enum class PostListViewAlerts {
-    FAILED_TO_DELETE
+sealed class PostListViewAction {
+    data class NavigateToPostDetails(val postId: Int) : PostListViewAction()
+    object FailedToDeleteAction : PostListViewAction()
 }

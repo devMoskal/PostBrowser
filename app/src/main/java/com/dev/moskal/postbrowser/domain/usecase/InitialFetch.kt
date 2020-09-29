@@ -15,6 +15,7 @@ import javax.inject.Inject
  */
 class InitialFetch @Inject constructor(private val fetchData: FetchData) {
 
+    @Suppress("EXPERIMENTAL_API_USAGE")
     suspend fun execute() {
         if (fetchData.syncState.value == SyncState.NOT_STARTED) {
             fetchData.execute()

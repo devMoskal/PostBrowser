@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dev.moskal.postbrowser.R
 import com.dev.moskal.postbrowser.databinding.PostListFragmentBinding
@@ -44,11 +45,17 @@ class PostListFragment : Fragment() {
             clickListener = viewModel
             lifecycleOwner = viewLifecycleOwner
         }
-        viewModel.alerts.observe(viewLifecycleOwner) {
+        viewModel.actions.observe(viewLifecycleOwner) {
             when (it) {
-                PostListViewAlerts.FAILED_TO_DELETE -> showSnackbar(R.string.unable_to_delete_post)
+                PostListViewAction.FailedToDeleteAction -> showSnackbar(R.string.unable_to_delete_post)
+                is PostListViewAction.NavigateToPostDetails -> navigateToPostDetail(it.postId)
             }
         }
+    }
+
+    private fun navigateToPostDetail(postId: Int) {
+        val action = PostListFragmentDirections.actionPostListFragmentToDetailsFragment(postId)
+        findNavController().navigate(action)
     }
 
     private fun showSnackbar(@StringRes stringRes: Int) {

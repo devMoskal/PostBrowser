@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.dev.moskal.postbrowser.R
-import com.dev.moskal.postbrowser.app.postlist.PostListFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -18,9 +17,6 @@ class MainActivity : AppCompatActivity() {
         title = resources.getString(R.string.post_list_label)
         if (savedInstanceState == null) {
             viewModel //enforce viewModel lazy initialization
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.container, PostListFragment.newInstance())
-                .commitNow()
         }
     }
 }

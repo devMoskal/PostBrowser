@@ -14,25 +14,25 @@ import com.dev.moskal.postbrowser.domain.usecase.GetPostsInfo
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class PostListViewModel @ViewModelInject constructor(
     getPostsInfoInfo: GetPostsInfo,
     private val deletePost: DeletePost
 ) : ViewModel(), PostItemClickListener {
 
+    @Suppress("EXPERIMENTAL_API_USAGE")
     val viewState = getPostsInfoInfo.execute()
         .map(::reducePostListToViewState)
         .onStart { emit(PostListViewState.LOADING) }
         .asLiveData()
 
-    private val _alerts = SingleLiveEvent<PostListViewAlerts>()
-    val alerts: SingleLiveEvent<PostListViewAlerts>
-        get() = _alerts
+    private val _actions = SingleLiveEvent<PostListViewAction>()
+    val actions: SingleLiveEvent<PostListViewAction>
+        get() = _actions
 
     override fun onClick(item: PostListItem.PostItem, action: PostItemClickListener.Action) {
         when (action) {
-            ITEM_CLICK -> Timber.i("### onClick $item")
+            ITEM_CLICK -> _actions.value = PostListViewAction.NavigateToPostDetails(item.id)
             DELETE_CLICK -> handleDeleteClick(item)
         }
     }
@@ -41,7 +41,7 @@ class PostListViewModel @ViewModelInject constructor(
         viewModelScope.launch {
             val result = deletePost.execute(item.id)
             if (result is Resource.Error) {
-                _alerts.value = PostListViewAlerts.FAILED_TO_DELETE
+                _actions.value = PostListViewAction.FailedToDeleteAction
             }
         }
     }

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/postListFragment">
+
+    <fragment
+        android:id="@+id/postListFragment"
+        android:name="com.dev.moskal.postbrowser.app.postlist.PostListFragment"
+        android:label="WorkHistoryFragment">
+
+        <action
+            android:id="@+id/action_postListFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"
+
+            />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.dev.moskal.postbrowser.app.postdetail.DetailsFragment"
+        android:label="DetailsFragment">
+
+        <argument
+            android:name="postId"
+            app:argType="integer" />
+    </fragment>
+</navigation>

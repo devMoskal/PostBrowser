@@ -32,7 +32,10 @@ suspend fun <T : Any> asResource(
 }
 
 fun <T> Flow<T>.asResourceFlow(): Flow<Resource<T>> = this
-    .map { Resource.Success(it) as Resource<T> }
+    .map {
+        @Suppress("USELESS_CAST") // needed due to type inference error
+        Resource.Success(it) as Resource<T>
+    }
     .catch {
         emit(Resource.Error(it))
     }
