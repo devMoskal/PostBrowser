@@ -76,9 +76,6 @@ dependencies {
     // Logger
     implementation "com.jakewharton.timber:timber:$timber_version"
 
-    // Data support
-    implementation "com.jakewharton.threetenabp:threetenabp:$threeten_version"
-
     // UI libs
     implementation "com.facebook.shimmer:shimmer:$shimmer_version"
 
