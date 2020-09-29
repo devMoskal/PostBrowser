@@ -30,6 +30,12 @@ internal class MainRepositoryTest : BaseTest() {
     @MockK
     internal lateinit var mockUserRepository: UserRepository
 
+    @MockK
+    internal lateinit var mockAlbumRepository: AlbumRepository
+
+    @MockK
+    internal lateinit var mockPhotoRepository: PhotoRepository
+
     @RelaxedMockK
     internal lateinit var mockDao: PostBrowserDao
 
@@ -41,7 +47,9 @@ internal class MainRepositoryTest : BaseTest() {
         repository = MainRepository(
             mockDao,
             mockPostRepository,
-            mockUserRepository
+            mockUserRepository,
+            mockAlbumRepository,
+            mockPhotoRepository
         ) {
             map { mockk() }
         }
@@ -55,11 +63,13 @@ internal class MainRepositoryTest : BaseTest() {
                 // given
                 coEvery { mockPostRepository.fetchData() } returns mockk()
                 coEvery { mockUserRepository.fetchData() } returns mockk()
+                coEvery { mockAlbumRepository.fetchData() } returns mockk()
+                coEvery { mockPhotoRepository.fetchData() } returns mockk()
                 // when
                 val result = repository.fetchData()
                 // then
                 assertThat(result).isInstanceOf(Resource.Success::class.java)
-                coCalledOnce { mockDao.batchUpdate(any(), any()) }
+                coCalledOnce { mockDao.batchUpdate(any(), any(), any(), any()) }
             }
 
         @Test
@@ -67,11 +77,13 @@ internal class MainRepositoryTest : BaseTest() {
             // given
             coEvery { mockPostRepository.fetchData() } throws HttpException(mockk(relaxed = true))
             coEvery { mockUserRepository.fetchData() } returns mockk()
+            coEvery { mockAlbumRepository.fetchData() } returns mockk()
+            coEvery { mockPhotoRepository.fetchData() } returns mockk()
             // when
             val result = repository.fetchData()
             // then
             assertThat(result).isInstanceOf(Resource.Error::class.java)
-            coWasNotCalled { mockDao.batchUpdate(any(), any()) }
+            coWasNotCalled { mockDao.batchUpdate(any(), any(), any(), any()) }
         }
 
         @Test
@@ -79,12 +91,43 @@ internal class MainRepositoryTest : BaseTest() {
             // given
             coEvery { mockPostRepository.fetchData() } returns mockk()
             coEvery { mockUserRepository.fetchData() } throws HttpException(mockk(relaxed = true))
+            coEvery { mockAlbumRepository.fetchData() } returns mockk()
+            coEvery { mockPhotoRepository.fetchData() } returns mockk()
 
             // when
             val result = repository.fetchData()
             // then
             assertThat(result).isInstanceOf(Resource.Error::class.java)
-            coWasNotCalled { mockDao.batchUpdate(any(), any()) }
+            coWasNotCalled { mockDao.batchUpdate(any(), any(), any(), any()) }
+        }
+
+        @Test
+        fun `when album repository fetched fails then do not update database`() = runBlocking {
+            // given
+            coEvery { mockPostRepository.fetchData() } returns mockk()
+            coEvery { mockUserRepository.fetchData() } returns mockk()
+            coEvery { mockAlbumRepository.fetchData() } throws HttpException(mockk(relaxed = true))
+            coEvery { mockPhotoRepository.fetchData() } returns mockk()
+            // when
+            val result = repository.fetchData()
+            // then
+            assertThat(result).isInstanceOf(Resource.Error::class.java)
+            coWasNotCalled { mockDao.batchUpdate(any(), any(), any(), any()) }
+        }
+
+        @Test
+        fun `when photo repository fetched fails then do not update database`() = runBlocking {
+            // given
+            coEvery { mockPostRepository.fetchData() } returns mockk()
+            coEvery { mockUserRepository.fetchData() } returns mockk()
+            coEvery { mockAlbumRepository.fetchData() } returns mockk()
+            coEvery { mockPhotoRepository.fetchData() } throws HttpException(mockk(relaxed = true))
+
+            // when
+            val result = repository.fetchData()
+            // then
+            assertThat(result).isInstanceOf(Resource.Error::class.java)
+            coWasNotCalled { mockDao.batchUpdate(any(), any(), any(), any()) }
         }
 
         @Test
@@ -92,11 +135,13 @@ internal class MainRepositoryTest : BaseTest() {
             // given
             coEvery { mockPostRepository.fetchData() } returns mockk()
             coEvery { mockUserRepository.fetchData() } returns mockk()
-            coEvery { mockDao.batchUpdate(any(), any()) } throws RuntimeException()
+            coEvery { mockAlbumRepository.fetchData() } returns mockk()
+            coEvery { mockPhotoRepository.fetchData() } returns mockk()
+            coEvery { mockDao.batchUpdate(any(), any(), any(), any()) } throws RuntimeException()
             // when
             val result = repository.fetchData()
             // then
-            coCalledOnce { mockDao.batchUpdate(any(), any()) }
+            coCalledOnce { mockDao.batchUpdate(any(), any(), any(), any()) }
             assertThat(result).isInstanceOf(Resource.Error::class.java)
         }
     }

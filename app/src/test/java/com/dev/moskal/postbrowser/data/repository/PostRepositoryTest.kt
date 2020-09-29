@@ -15,6 +15,9 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import retrofit2.HttpException
 
+/*
+ * As other repo test would be very similar I've omitted them in sample app
+ */
 @Suppress("EXPERIMENTAL_API_USAGE")
 internal class PostRepositoryTest : BaseTest() {
 

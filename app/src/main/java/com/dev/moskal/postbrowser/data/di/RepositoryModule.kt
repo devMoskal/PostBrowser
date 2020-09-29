@@ -34,14 +34,14 @@ class RepositoryModule {
         dao: PostBrowserDao,
         postRepository: PostRepository,
         userRepository: UserRepository,
-        photosRepository: PhotosRepository,
-        albumRepository: AlbumRepository
+        albumRepository: AlbumRepository,
+        photoRepository: PhotoRepository,
     ): Repository = MainRepository(
         dao,
         postRepository,
         userRepository,
-        photosRepository,
         albumRepository,
+        photoRepository,
         List<DbPostWithUser>::mapPostAndUserDbEntityToDomainModel
     )
 
@@ -59,5 +59,5 @@ class RepositoryModule {
 
     @Provides
     internal fun providePhotoRepository(api: PhotoApi) =
-        PhotosRepository(api, List<PhotoApiResponse>::mapPhotoApiResponseToDbEntity)
+        PhotoRepository(api, List<PhotoApiResponse>::mapPhotoApiResponseToDbEntity)
 }

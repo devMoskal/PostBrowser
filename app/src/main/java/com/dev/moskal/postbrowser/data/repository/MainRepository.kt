@@ -17,8 +17,8 @@ internal class MainRepository(
     private val dao: PostBrowserDao,
     private val postRepository: PostRepository,
     private val userRepository: UserRepository,
-    private val photosRepository: PhotosRepository,
     private val albumRepository: AlbumRepository,
+    private val photoRepository: PhotoRepository,
     private val mapPostInfoDbEntityToDomainModelWithUser: List<DbPostWithUser>.() -> List<PostInfo>
 ) : Repository {
 
@@ -31,7 +31,7 @@ internal class MainRepository(
             val posts = async { postRepository.fetchData() }
             val users = async { userRepository.fetchData() }
             val albums = async { albumRepository.fetchData() }
-            val photos = async { photosRepository.fetchData() }
+            val photos = async { photoRepository.fetchData() }
             dao.batchUpdate(posts.await(), users.await(), albums.await(), photos.await())
         }
     }

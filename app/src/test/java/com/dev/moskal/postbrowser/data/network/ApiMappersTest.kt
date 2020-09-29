@@ -42,8 +42,8 @@ internal class PostMapperApiResponseToDbEntityTest {
                 ),
 
                 Arguments.of(
-                    listOf(PostApiResponse(1, null, null, null)),
-                    listOf(DbPost(1, -1, "", ""))
+                    listOf(PostApiResponse(1, 2, null, null)),
+                    listOf(DbPost(1, 2, "", ""))
                 ),
 
                 Arguments.of(

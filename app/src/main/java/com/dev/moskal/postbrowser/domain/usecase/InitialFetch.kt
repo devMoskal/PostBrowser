@@ -1,7 +1,6 @@
 package com.dev.moskal.postbrowser.domain.usecase
 
 import com.dev.moskal.postbrowser.domain.model.SyncState
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
 /**
@@ -15,7 +14,7 @@ import javax.inject.Inject
  * we can just invoke this Use Case from there and we are good to go.
  */
 class InitialFetch @Inject constructor(private val fetchData: FetchData) {
-    @ExperimentalCoroutinesApi
+
     suspend fun execute() {
         if (fetchData.syncState.value == SyncState.NOT_STARTED) {
             fetchData.execute()
