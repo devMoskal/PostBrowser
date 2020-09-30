@@ -15,4 +15,6 @@ internal class PostRepository constructor(
     fun getPostsInfo() = dao.getPostsInfo()
 
     suspend fun delete(id: Int) = dao.deletePost(id)
+
+    suspend fun getPost(id: Int): DbPost? = dao.getPost(id)
 }

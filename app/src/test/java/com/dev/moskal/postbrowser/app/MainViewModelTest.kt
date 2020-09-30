@@ -6,14 +6,14 @@ import com.dev.moskal.postbrowser.domain.usecase.InitialFetch
 import io.mockk.mockk
 import org.junit.jupiter.api.Test
 
-internal class MainActivityViewModelTest : BaseTest() {
+internal class MainViewModelTest : BaseTest() {
 
     @Test
     fun `when viewModel is created then start initial fetch`() {
         // given
         val initialFetch = mockk<InitialFetch>(relaxed = true)
         // when
-        MainActivityViewModel(initialFetch)
+        MainViewModel(initialFetch)
         // then
         coCalledOnce { initialFetch.execute() }
     }

@@ -1,9 +1,7 @@
 package com.dev.moskal.postbrowser.data.di
 
 
-import com.dev.moskal.postbrowser.data.db.DbPostWithUser
-import com.dev.moskal.postbrowser.data.db.PostBrowserDao
-import com.dev.moskal.postbrowser.data.db.mapPostAndUserDbEntityToDomainModel
+import com.dev.moskal.postbrowser.data.db.*
 import com.dev.moskal.postbrowser.data.network.api.AlbumApi
 import com.dev.moskal.postbrowser.data.network.api.PhotoApi
 import com.dev.moskal.postbrowser.data.network.api.PostApi
@@ -42,7 +40,8 @@ class RepositoryModule {
         userRepository,
         albumRepository,
         photoRepository,
-        List<DbPostWithUser>::mapPostAndUserDbEntityToDomainModel
+        List<DbPostWithUser>::mapPostAndUserDbEntityToDomainModel,
+        DbPost::mapPostDbEntityToDomainModel,
     )
 
     @Provides
