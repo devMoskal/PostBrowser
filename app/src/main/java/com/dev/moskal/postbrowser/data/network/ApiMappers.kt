@@ -22,5 +22,5 @@ fun List<AlbumApiResponse>.mapAlbumApiResponseToDbEntity(): List<DbAlbum> = map 
 }
 
 fun List<PhotoApiResponse>.mapPhotoApiResponseToDbEntity(): List<DbPhoto> = map {
-    DbPhoto(it.id, it.albumId, it.url.orEmpty())
+    DbPhoto(it.id, it.albumId, it.title.orEmpty(), it.url.orEmpty())
 }

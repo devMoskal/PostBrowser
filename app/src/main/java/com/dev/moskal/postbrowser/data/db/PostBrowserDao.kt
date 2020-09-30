@@ -1,6 +1,7 @@
 package com.dev.moskal.postbrowser.data.db
 
 import androidx.room.*
+import com.dev.moskal.postbrowser.data.db.PostBrowserDatabase.Companion.TABLE_ALBUMS
 import com.dev.moskal.postbrowser.data.db.PostBrowserDatabase.Companion.TABLE_POSTS
 import kotlinx.coroutines.flow.Flow
 
@@ -38,5 +39,9 @@ interface PostBrowserDao {
 
     @Transaction
     @Query("SELECT * FROM $TABLE_POSTS")
-    fun getPostsInfo(): Flow<List<DbPostWithUser>>
+    fun getPostWithUser(): Flow<List<DbPostWithUser>>
+
+    @Transaction
+    @Query("SELECT * FROM $TABLE_ALBUMS WHERE userId = :userId")
+    suspend fun getAlbumsWithPhoto(userId: Int): List<DbAlbumWithPhotos>
 }

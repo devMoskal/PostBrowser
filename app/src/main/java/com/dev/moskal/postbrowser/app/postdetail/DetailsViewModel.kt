@@ -9,13 +9,15 @@ import com.dev.moskal.postbrowser.domain.model.POST_NOT_SELECTED_ID
 import com.dev.moskal.postbrowser.domain.model.Post
 import com.dev.moskal.postbrowser.domain.model.Resource
 import com.dev.moskal.postbrowser.domain.usecase.GetPost
+import com.dev.moskal.postbrowser.domain.usecase.GetUserAlbums
 import kotlinx.coroutines.launch
 
 class DetailsViewModel @ViewModelInject constructor(
-    private val getPost: GetPost
+    private val getPost: GetPost,
+    private val getUserAlbums: GetUserAlbums,
 ) : ViewModel() {
 
-    private val _viewState = MutableLiveData<DetailsViewState>(DetailsViewState.LOADING)
+    private val _viewState = MutableLiveData(DetailsViewState.LOADING)
     val viewState: LiveData<DetailsViewState>
         get() = _viewState
 
@@ -31,6 +33,7 @@ class DetailsViewModel @ViewModelInject constructor(
         getPost.execute(postId).apply {
             if (this is Resource.Success && data != null) {
                 reducePostToViewState(data)
+                getUserAlbums.execute(data.userId)
             } else {
                 handleError()
             }

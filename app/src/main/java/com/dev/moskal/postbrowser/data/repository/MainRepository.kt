@@ -2,14 +2,12 @@
 
 package com.dev.moskal.postbrowser.data.repository
 
-import com.dev.moskal.postbrowser.data.db.DbPost
-import com.dev.moskal.postbrowser.data.db.DbPostWithUser
 import com.dev.moskal.postbrowser.data.db.PostBrowserDao
 import com.dev.moskal.postbrowser.domain.Repository
-import com.dev.moskal.postbrowser.domain.model.*
+import com.dev.moskal.postbrowser.domain.model.asResource
+import com.dev.moskal.postbrowser.domain.model.asResourceFlow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
 internal class MainRepository(
@@ -18,8 +16,6 @@ internal class MainRepository(
     private val userRepository: UserRepository,
     private val albumRepository: AlbumRepository,
     private val photoRepository: PhotoRepository,
-    private val mapPostInfoDbEntityToDomainModelWithUser: List<DbPostWithUser>.() -> List<PostInfo>,
-    private val mapPostDbEntityToDomainModelWithUser: DbPost.() -> Post
 ) : Repository {
 
     /*
@@ -36,13 +32,14 @@ internal class MainRepository(
         }
     }
 
-    override fun getPostsInfo() = postRepository.getPostsInfo()
-        .map(mapPostInfoDbEntityToDomainModelWithUser::invoke)
-        .asResourceFlow()
+    override fun getPostsInfo() = postRepository.getPostsInfo().asResourceFlow()
 
-    override suspend fun getPost(id: Int): Resource<Post> = asResource {
-        postRepository.getPost(id)?.mapPostDbEntityToDomainModelWithUser()
-            ?: throw NoSuchElementException()
+    override suspend fun getPost(id: Int) = asResource {
+        postRepository.getPost(id)
+    }
+
+    override suspend fun getUserAlbums(userId: Int) = asResource {
+        albumRepository.getAlbumsForUser(userId)
     }
 
     override suspend fun deletePost(id: Int) = asResource {

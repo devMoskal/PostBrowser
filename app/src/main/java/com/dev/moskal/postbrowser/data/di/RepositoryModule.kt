@@ -40,21 +40,30 @@ class RepositoryModule {
         userRepository,
         albumRepository,
         photoRepository,
-        List<DbPostWithUser>::mapPostAndUserDbEntityToDomainModel,
-        DbPost::mapPostDbEntityToDomainModel,
     )
 
     @Provides
     internal fun providePostRepository(api: PostApi, dao: PostBrowserDao) =
-        PostRepository(api, dao, List<PostApiResponse>::mapPostApiResponseToDbEntity)
+        PostRepository(
+            api,
+            dao,
+            List<PostApiResponse>::mapPostApiResponseToDbEntity,
+            List<DbPostWithUser>::mapPostAndUserDbEntityToDomainModel,
+            DbPost::mapPostDbEntityToDomainModel,
+        )
 
     @Provides
     internal fun provideUserRepository(api: UserApi) =
         UserRepository(api, List<UserApiResponse>::mapUserApiResponseToDbEntity)
 
     @Provides
-    internal fun provideAlbumRepository(api: AlbumApi) =
-        AlbumRepository(api, List<AlbumApiResponse>::mapAlbumApiResponseToDbEntity)
+    internal fun provideAlbumRepository(api: AlbumApi, dao: PostBrowserDao) =
+        AlbumRepository(
+            api,
+            dao,
+            List<AlbumApiResponse>::mapAlbumApiResponseToDbEntity,
+            List<DbAlbumWithPhotos>::mapAlbumWithPhotosDbEntityToDomainModel
+        )
 
     @Provides
     internal fun providePhotoRepository(api: PhotoApi) =

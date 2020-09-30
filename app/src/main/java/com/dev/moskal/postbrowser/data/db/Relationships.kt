@@ -12,3 +12,13 @@ data class DbPostWithUser(
     )
     val user: DbUser? = null,
 )
+
+data class DbAlbumWithPhotos(
+    @Embedded val album: DbAlbum,
+
+    @Relation(
+        parentColumn = "albumId",
+        entityColumn = "parentAlbumId"
+    )
+    val photos: List<DbPhoto>? = null,
+)

@@ -49,9 +49,8 @@ internal class MainRepositoryTest : BaseTest() {
             mockPostRepository,
             mockUserRepository,
             mockAlbumRepository,
-            mockPhotoRepository,
-            { map { mockk() } }
-        ) { mockk() }
+            mockPhotoRepository
+        )
     }
 
     @Nested

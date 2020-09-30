@@ -1,9 +1,9 @@
 package com.dev.moskal.postbrowser.data.repository
 
 import com.dev.moskal.postbrowser.BaseTest
-import com.dev.moskal.postbrowser.data.db.DbPostWithUser
 import com.dev.moskal.postbrowser.data.db.PostBrowserDao
 import com.dev.moskal.postbrowser.data.network.api.PostApi
+import com.dev.moskal.postbrowser.domain.model.PostInfo
 import com.google.common.truth.Truth.assertThat
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
@@ -33,8 +33,10 @@ internal class PostRepositoryTest : BaseTest() {
     fun init() {
         repository = PostRepository(
             mockService,
-            mockDao
-        ) { map { mockk() } }
+            mockDao,
+            { map { mockk() } },
+            { map { mockk() } },
+        ) { mockk() }
     }
 
     @Test
@@ -76,7 +78,7 @@ internal class PostRepositoryTest : BaseTest() {
     @Test
     fun `when dao returns fix number of post then get all of them`() = runBlockingTest {
         // given
-        every { mockDao.getPostsInfo() } returns flowOf(
+        every { mockDao.getPostWithUser() } returns flowOf(
             listOf(
                 mockk(relaxed = true),
                 mockk(relaxed = true)
@@ -88,13 +90,13 @@ internal class PostRepositoryTest : BaseTest() {
 
         // then
         assertThat(posts).isNotEmpty()
-        assertThat(posts[0][0]).isInstanceOf(DbPostWithUser::class.java)
+        assertThat(posts[0][0]).isInstanceOf(PostInfo::class.java)
     }
 
     @Test
     fun `when dao emits several responses then get all of them`() = runBlockingTest {
         // given
-        every { mockDao.getPostsInfo() } returns flowOf(
+        every { mockDao.getPostWithUser() } returns flowOf(
             listOf(mockk(relaxed = true), mockk(relaxed = true)),
             listOf(mockk(relaxed = true), mockk(relaxed = true)),
             listOf(mockk(relaxed = true)),
