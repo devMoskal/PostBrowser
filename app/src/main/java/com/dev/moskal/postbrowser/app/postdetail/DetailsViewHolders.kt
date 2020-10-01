@@ -78,7 +78,7 @@ internal class PhotoViewHolder(
             )
             Glide.with(view.context)
                 .load(glideUrl)
-                .error(R.drawable.photo_placeholder)
+                .error(R.drawable.photo_error_placeholder)
                 .placeholder(R.drawable.loading_placeholder)
                 .into(view)
         }
