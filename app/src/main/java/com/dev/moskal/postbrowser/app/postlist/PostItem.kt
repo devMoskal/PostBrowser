@@ -5,10 +5,6 @@ import com.dev.moskal.postbrowser.app.postlist.PostListViewTypes.TYPE_LOADING
 import com.dev.moskal.postbrowser.app.postlist.PostListViewTypes.TYPE_POST
 import com.dev.moskal.postbrowser.domain.model.PostInfo
 
-/**
- * Different types of item which can occur on [PostInfo]s list.
- * As for a sample app there is only one item
- */
 sealed class PostListItem(val type: Int) {
 
     data class PostItem(

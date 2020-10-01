@@ -7,9 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.dev.moskal.postbrowser.app.MainViewModel
 import com.dev.moskal.postbrowser.databinding.DetailsFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class DetailsFragment : Fragment() {
@@ -17,10 +19,14 @@ class DetailsFragment : Fragment() {
     private val viewModel: DetailsViewModel by viewModels()
     private val sharedViewModel: MainViewModel by activityViewModels()
 
+    @Inject
+    lateinit var albumListAdapter: AlbumListAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = DetailsFragmentBinding.inflate(inflater, container, false)
+        setupRecyclerView()
         return binding.root
     }
 
@@ -30,6 +36,14 @@ class DetailsFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         sharedViewModel.selectedPost.observe(viewLifecycleOwner) {
             viewModel.selectPost(it)
+        }
+    }
+
+    private fun setupRecyclerView() {
+        with(binding.recyclerView) {
+            layoutManager = LinearLayoutManager(context)
+
+            adapter = albumListAdapter
         }
     }
 }

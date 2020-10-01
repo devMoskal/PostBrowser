@@ -2,57 +2,47 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-
     <data>
-
         <import type="android.view.View" />
-
         <import type="androidx.lifecycle.LiveData" />
-
         <import type="com.dev.moskal.postbrowser.app.postdetail.DetailsViewState" />
-
         <variable
             name="viewState"
             type="LiveData&lt;DetailsViewState&gt;" />
     </data>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_margin="@dimen/margin_medium"
             android:paddingBottom="@dimen/margin_general"
             android:animateLayoutChanges="true">
 
             <TextView
-                android:id="@+id/title"
+                android:id="@+id/errorLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@{viewState.postTitle}"
+                android:text="@{viewState.isPostSelected() ? @string/no_selected_post : @string/error}"
                 android:textSize="@dimen/text_size_large"
                 android:textStyle="bold"
                 android:textColor="@color/text_dark"
+                android:visibility="@{(viewState.isError() || !viewState.isPostSelected()) ? View.VISIBLE : View.GONE}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Title 1" />
 
-            <TextView
-                android:id="@+id/responsibilityTV"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textColor="@color/text_dark"
-                android:text="@{viewState.body}"
-                android:layout_marginTop="@dimen/margin_general"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/title"
-                tools:text="2015-48-87" />
-
+                android:layout_height="0dp"
+                android:visibility="@{(!viewState.items.isEmpty()) ? View.VISIBLE : View.GONE}"
+                android:overScrollMode="never"
+                app:album_list_items="@{viewState.items}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
 </layout>
