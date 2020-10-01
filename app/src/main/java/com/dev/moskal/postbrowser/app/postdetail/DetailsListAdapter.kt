@@ -85,7 +85,7 @@ class AlbumListDiffUtil : DiffUtil.ItemCallback<DetailsListItem>() {
             is DetailsListItem.AlbumItem -> newItem is DetailsListItem.AlbumItem && oldItem.id == newItem.id
             is DetailsListItem.PhotoItem -> newItem is DetailsListItem.PhotoItem && oldItem.url == newItem.url
             DetailsListItem.AlbumLoadingItem -> newItem is DetailsListItem.AlbumLoadingItem
-            is DetailsListItem.HeaderItem -> newItem is DetailsListItem.AlbumItem
+            is DetailsListItem.HeaderItem -> newItem is DetailsListItem.HeaderItem
         }
 
     override fun areContentsTheSame(
