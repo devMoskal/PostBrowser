@@ -22,7 +22,11 @@ class DetailsViewModel @ViewModelInject constructor(
     val viewState: LiveData<DetailsViewState>
         get() = _viewState
 
+    private var currentPostId: Int = POST_NOT_SELECTED_ID
+
     fun selectPost(postId: Int?) {
+        if (postId == currentPostId) return
+        currentPostId = postId ?: POST_NOT_SELECTED_ID
         if (postId == null || postId == POST_NOT_SELECTED_ID) {
             _viewState.value = DetailsViewState.NO_POST_SELECTED
         } else {
