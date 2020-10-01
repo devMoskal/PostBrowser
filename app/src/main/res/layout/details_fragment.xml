@@ -3,12 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
+
         <import type="android.view.View" />
+
         <import type="androidx.lifecycle.LiveData" />
+
         <import type="com.dev.moskal.postbrowser.app.postdetail.DetailsViewState" />
+
         <variable
             name="viewState"
             type="LiveData&lt;DetailsViewState&gt;" />
+
+        <variable
+            name="clickListener"
+            type="com.dev.moskal.postbrowser.app.postdetail.AlbumClickListener" />
     </data>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -38,6 +46,7 @@
                 android:layout_height="0dp"
                 android:visibility="@{(!viewState.items.isEmpty()) ? View.VISIBLE : View.GONE}"
                 android:overScrollMode="never"
+                app:album_click_listener="@{clickListener}"
                 app:album_list_items="@{viewState.items}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"

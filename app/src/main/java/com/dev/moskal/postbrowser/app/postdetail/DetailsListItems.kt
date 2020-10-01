@@ -30,7 +30,8 @@ sealed class DetailsListItem(val type: Int) {
 
     data class AlbumItem(
         val id: Int,
-        val title: String
+        val title: String,
+        val isExpanded: Boolean = false
     ) : DetailsListItem(TYPE_ALBUM) {
         constructor(album: Album) : this(
             album.id,
@@ -41,12 +42,14 @@ sealed class DetailsListItem(val type: Int) {
     data class PhotoItem(
         val id: Int,
         val title: String,
-        val url: String
+        val url: String,
+        val isVisible: Boolean
     ) : DetailsListItem(TYPE_PHOTO) {
-        constructor(photo: Photo) : this(
+        constructor(photo: Photo, isVisible: Boolean) : this(
             photo.id,
             photo.title,
-            photo.url
+            photo.url,
+            isVisible
         )
     }
 

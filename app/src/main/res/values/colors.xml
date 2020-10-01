@@ -6,4 +6,5 @@
     <color name="colorIcon">#757575</color>
     <color name="text_dark">#000000</color>
     <color name="secondary_text">#757575</color>
+    <color name="loading">#dddddd</color>
 </resources>

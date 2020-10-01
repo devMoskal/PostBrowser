@@ -19,7 +19,7 @@ import javax.inject.Inject
  */
 class AlbumListAdapter @Inject constructor() :
     ListAdapter<DetailsListItem, RecyclerView.ViewHolder>(AlbumListDiffUtil()) {
-
+    private lateinit var clickListener: AlbumClickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -35,6 +35,7 @@ class AlbumListAdapter @Inject constructor() :
         when (holder) {
             is AlbumViewHolder -> holder.bind(
                 getItem(position) as DetailsListItem.AlbumItem,
+                clickListener
             )
             is PhotoViewHolder -> holder.bind(
                 getItem(position) as DetailsListItem.PhotoItem,
@@ -63,6 +64,17 @@ class AlbumListAdapter @Inject constructor() :
             items?.let {
                 (adapter as AlbumListAdapter).update(items)
             }
+        }
+
+        /**
+         * DataBinding adapter for returning click events from adapter
+         *
+         * @param clickListener hook to notify about clicked item
+         */
+        @JvmStatic
+        @BindingAdapter("album_click_listener")
+        fun RecyclerView.bindClickListener(clickListener: AlbumClickListener) {
+            (adapter as AlbumListAdapter).clickListener = clickListener
         }
     }
 }

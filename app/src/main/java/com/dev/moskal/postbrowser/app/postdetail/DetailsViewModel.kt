@@ -13,10 +13,12 @@ import com.dev.moskal.postbrowser.domain.usecase.GetPost
 import com.dev.moskal.postbrowser.domain.usecase.GetUserAlbums
 import kotlinx.coroutines.launch
 
+internal typealias AlbumItemId = Int
+
 class DetailsViewModel @ViewModelInject constructor(
     private val getPost: GetPost,
     private val getUserAlbums: GetUserAlbums,
-) : ViewModel() {
+) : ViewModel(), AlbumClickListener {
 
     private val _viewState = MutableLiveData(DetailsViewState.LOADING)
     val viewState: LiveData<DetailsViewState>
@@ -31,6 +33,33 @@ class DetailsViewModel @ViewModelInject constructor(
             _viewState.value = DetailsViewState.NO_POST_SELECTED
         } else {
             loadPost(postId)
+        }
+    }
+
+
+    private val cachedPhotoItems = HashMap<AlbumItemId, List<DetailsListItem.PhotoItem>>()
+
+    override fun onClick(album: DetailsListItem.AlbumItem) {
+        viewState.value?.items?.let { list ->
+            _viewState.value = DetailsViewState(list.toMutableList().also { itemList ->
+                val albumIndex = itemList.indexOf(album)
+                if (albumIndex == -1) return
+                itemList[albumIndex] = album.copy(isExpanded = !album.isExpanded)
+                if (!album.isExpanded) {
+                    cachedPhotoItems[album.id]?.let { itemList.addAll(albumIndex + 1, it) }
+                } else {
+                    val iterator = itemList.listIterator(albumIndex + 1)
+                    while (iterator.hasNext()) {
+                        val item = iterator.next()
+                        if (item is DetailsListItem.AlbumItem) break
+                        if (item is DetailsListItem.PhotoItem) {
+                            iterator.remove()
+                        }
+                    }
+                }
+
+
+            })
         }
     }
 
@@ -67,8 +96,12 @@ class DetailsViewModel @ViewModelInject constructor(
         val result = mutableListOf<DetailsListItem>()
         header?.let(result::add)
         albums.forEach { album ->
-            result.add(DetailsListItem.AlbumItem(album))
-            result.addAll(album.photos.map { DetailsListItem.PhotoItem(it) })
+            val albumItem = DetailsListItem.AlbumItem(album)
+            result.add(albumItem)
+            val elements = album.photos.take(5)
+                .map { DetailsListItem.PhotoItem(it, isVisible = albumItem.isExpanded) }
+            cachedPhotoItems[albumItem.id] = elements
+            //result.addAll(elements)
         }
         return result
     }
@@ -78,5 +111,9 @@ class DetailsViewModel @ViewModelInject constructor(
         // error handling should be a bit more sophisticated to handle each error differently
         // done for simplicity in sample app
         _viewState.value = DetailsViewState.ERROR
+    }
+
+    companion object {
+        const val IS_ALBUM_COLLAPSED_BY_DEFAULT = true
     }
 }

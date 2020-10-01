@@ -33,6 +33,7 @@ class DetailsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         binding.viewState = viewModel.viewState
+        binding.clickListener = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
         sharedViewModel.selectedPost.observe(viewLifecycleOwner) {
             viewModel.selectPost(it)
@@ -42,7 +43,6 @@ class DetailsFragment : Fragment() {
     private fun setupRecyclerView() {
         with(binding.recyclerView) {
             layoutManager = LinearLayoutManager(context)
-
             adapter = albumListAdapter
         }
     }

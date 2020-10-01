@@ -33,8 +33,9 @@ internal class AlbumViewHolder(
     )
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(item: DetailsListItem.AlbumItem) {
+    fun bind(item: DetailsListItem.AlbumItem, clickListener: AlbumClickListener) {
         binding.item = item
+        binding.clickListener = clickListener
     }
 }
 

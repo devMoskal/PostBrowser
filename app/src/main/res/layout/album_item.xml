@@ -10,11 +10,19 @@
         <variable
             name="item"
             type="com.dev.moskal.postbrowser.app.postdetail.DetailsListItem.AlbumItem" />
+
+        <variable
+            name="clickListener"
+            type="com.dev.moskal.postbrowser.app.postdetail.AlbumClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:onClick="@{() ->  clickListener.onClick(item)}">
 
         <TextView
             android:id="@+id/nameTV"

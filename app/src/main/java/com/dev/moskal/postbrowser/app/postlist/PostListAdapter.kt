@@ -12,7 +12,7 @@ import javax.inject.Inject
 /**
  * Adapter of [RecyclerView] which is responsible for showing [PostListItem]
  *
- * Both [items] are provided via DataBinding,
+ * [items] are provided via DataBinding,
  * using custom adapter implemented in companion object
  */
 class PostListAdapter @Inject constructor() :
