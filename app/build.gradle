@@ -36,6 +36,10 @@ android {
 
     kotlinOptions {
         jvmTarget = "1.8"
+
+        // Enable Coroutines and Flow Experimental APIs
+        freeCompilerArgs += "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
+        freeCompilerArgs += "-Xopt-in=kotlinx.coroutines.FlowPreview"
     }
 
     packagingOptions {
@@ -43,6 +47,18 @@ android {
         // https://github.com/Kotlin/kotlinx.coroutines/issues/2023
         exclude 'META-INF/AL2.0'
         exclude 'META-INF/LGPL2.1'
+    }
+
+    android {
+        sourceSets {
+            String sharedTestDir = 'src/sharedTest/java'
+            test {
+                java.srcDirs += sharedTestDir
+            }
+            androidTest {
+                java.srcDirs += sharedTestDir
+            }
+        }
     }
 }
 
@@ -115,4 +131,5 @@ dependencies {
     androidTestImplementation "androidx.arch.core:core-testing:$arch_testing_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$espresso_version"
+    androidTestImplementation "com.google.truth:truth:$truth_version"
 }

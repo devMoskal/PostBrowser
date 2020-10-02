@@ -3,6 +3,7 @@ package com.dev.moskal.postbrowser.data.db
 import androidx.room.*
 import com.dev.moskal.postbrowser.data.db.PostBrowserDatabase.Companion.TABLE_ALBUMS
 import com.dev.moskal.postbrowser.data.db.PostBrowserDatabase.Companion.TABLE_POSTS
+import com.dev.moskal.postbrowser.data.db.PostBrowserDatabase.Companion.TABLE_USERS
 import kotlinx.coroutines.flow.Flow
 
 
@@ -13,8 +14,8 @@ interface PostBrowserDao {
     suspend fun batchUpdate(
         posts: List<DbPost>, users: List<DbUser>, albums: List<DbAlbum>, photos: List<DbPhoto>,
     ) {
-        insertPosts(posts)
         insertUsers(users)
+        insertPosts(posts)
         insertAlbums(albums)
         insertPhotos(photos)
     }
@@ -44,4 +45,8 @@ interface PostBrowserDao {
     @Transaction
     @Query("SELECT * FROM $TABLE_ALBUMS WHERE userId = :userId")
     suspend fun getAlbumsWithPhoto(userId: Int): List<DbAlbumWithPhotos>
+
+    // unused in a project, added just to play with db relationships in tests
+    @Query("DELETE FROM $TABLE_USERS WHERE userId = :id")
+    suspend fun deleteUser(id: Int)
 }

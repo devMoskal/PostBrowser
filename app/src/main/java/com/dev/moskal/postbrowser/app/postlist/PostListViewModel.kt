@@ -20,7 +20,6 @@ class PostListViewModel @ViewModelInject constructor(
     private val deletePost: DeletePost
 ) : ViewModel(), PostItemClickListener {
 
-    @Suppress("EXPERIMENTAL_API_USAGE")
     val viewState = getPostsInfoInfo.execute()
         .map(::reducePostListToViewState)
         .onStart { emit(PostListViewState.LOADING) }

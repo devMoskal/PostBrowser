@@ -11,7 +11,7 @@ import java.util.stream.Stream
  * test of each db mapper would be very similar
  *
  * as I would not show any new technology/design other db mapper tests
- * were omitted in sample application due to time constrain
+ * were omitted in sample application due to time constrains
  */
 internal class PostAndUserMapperDbEntityToDomainModelTest {
 

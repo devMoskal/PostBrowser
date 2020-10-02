@@ -14,7 +14,6 @@ class GetPostsInfo @Inject constructor(
     private val fetchData: FetchData
 ) {
 
-    @Suppress("EXPERIMENTAL_API_USAGE")
     fun execute(): Flow<Resource<List<PostInfo>>> =
         fetchData.syncState
             .filterNot { it == SyncState.NOT_STARTED || it == SyncState.IN_PROGRESS }
