@@ -19,9 +19,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_small"
+        android:padding="@dimen/margin_medium"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground"
+        android:background="@color/colorPrimaryDark"
         android:onClick="@{() ->  clickListener.onClick(item)}">
 
         <TextView
@@ -29,8 +32,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@{item.title}"
-            android:textStyle="bold"
             android:textSize="@dimen/text_size_large"
+            android:textColor="@color/text_light"
             android:layout_marginEnd="@dimen/margin_small"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

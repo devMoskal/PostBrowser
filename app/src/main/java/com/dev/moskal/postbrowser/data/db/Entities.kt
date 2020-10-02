@@ -9,7 +9,7 @@ import com.dev.moskal.postbrowser.data.db.PostBrowserDatabase.Companion.TABLE_PH
 import com.dev.moskal.postbrowser.data.db.PostBrowserDatabase.Companion.TABLE_POSTS
 import com.dev.moskal.postbrowser.data.db.PostBrowserDatabase.Companion.TABLE_USERS
 
-// note: I made an assumption that only used filed should be cached
+// note: I made an assumption that only used filed should be cached in database
 
 @Entity(tableName = TABLE_POSTS)
 data class DbPost(

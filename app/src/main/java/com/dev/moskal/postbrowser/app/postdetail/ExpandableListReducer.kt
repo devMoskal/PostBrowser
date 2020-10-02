@@ -10,13 +10,13 @@ import javax.inject.Inject
 
 /**
  *
- * reducer converting data to view state. It implement mechanism to support
- * expandable/foldable header
+ * Reducer converting data to view state. It implement mechanism to support
+ * expandable/foldable header.
  *
  * Typically expandable/foldable headers are implement in recycler view and adapter.
  * However moving solution from view layer to presentation has some benefits:
  * - speed of implementation
- * - one source of truth for list items
+ * - one source of truth for items
  * - reactive approach
  * - out-of-the-box support for configuration change.
  *

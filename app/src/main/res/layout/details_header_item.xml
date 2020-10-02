@@ -12,37 +12,49 @@
             type="com.dev.moskal.postbrowser.app.postdetail.DetailsListItem.HeaderItem" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.cardview.widget.CardView
+        android:id="@+id/post_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_medium"
-        android:paddingBottom="@dimen/margin_general"
-        android:animateLayoutChanges="true">
+        android:layout_marginLeft="@dimen/margin_small"
+        android:layout_marginTop="@dimen/margin_tiny"
+        android:layout_marginRight="@dimen/margin_small"
+        android:layout_marginBottom="@dimen/margin_small"
+        app:contentPadding="@dimen/margin_medium">
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="0dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{item.title}"
-            android:textSize="@dimen/text_size_large"
-            android:textStyle="bold"
-            android:textColor="@color/text_dark"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Title 1" />
+            android:layout_marginTop="@dimen/margin_medium"
+            android:animateLayoutChanges="true"
+            android:paddingBottom="@dimen/margin_general">
 
-        <TextView
-            android:id="@+id/responsibilityTV"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textColor="@color/text_dark"
-            android:text="@{item.body}"
-            android:layout_marginTop="@dimen/margin_general"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/title"
-            tools:text="2015-48-87" />
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{item.title}"
+                android:gravity="center"
+                android:textColor="@color/text_dark"
+                android:textSize="@dimen/text_size_large"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Title 1" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/responsibilityTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_general"
+                android:text="@{item.body}"
+                android:textColor="@color/text_dark"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                tools:text="2015-48-87" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 </layout>
