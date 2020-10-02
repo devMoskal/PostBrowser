@@ -52,7 +52,6 @@
             android:id="@+id/recyclerView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:scrollbars="vertical"
             android:visibility="@{(!viewState.items.isEmpty()) ? View.VISIBLE : View.GONE}"
             app:post_list_items="@{viewState.items}"
             app:click_listener="@{clickListener}"

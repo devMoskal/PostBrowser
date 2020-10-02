@@ -8,7 +8,6 @@ import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dev.moskal.postbrowser.R
 import com.dev.moskal.postbrowser.app.MainViewModel
@@ -20,10 +19,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class PostListFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = PostListFragment()
-    }
-
     @Inject
     lateinit var postAdapter: PostListAdapter
 
@@ -31,7 +26,6 @@ class PostListFragment : Fragment() {
     private val sharedViewModel: MainViewModel by activityViewModels()
 
     private lateinit var binding: PostListFragmentBinding
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -51,15 +45,13 @@ class PostListFragment : Fragment() {
         viewModel.actions.observe(viewLifecycleOwner) {
             when (it) {
                 PostListViewAction.FailedToDeleteAction -> showSnackbar(R.string.unable_to_delete_post)
-                is PostListViewAction.NavigateToPostDetails -> navigateToPostDetail(it.postId)
+                is PostListViewAction.OnPostSelected -> navigateToPostDetail(it.postId)
             }
         }
     }
 
     private fun navigateToPostDetail(postId: Int) {
         sharedViewModel.selectPost(postId)
-        val action = PostListFragmentDirections.actionPostListFragmentToDetailsFragment(postId)
-        findNavController().navigate(action)
     }
 
     private fun showSnackbar(@StringRes stringRes: Int) {

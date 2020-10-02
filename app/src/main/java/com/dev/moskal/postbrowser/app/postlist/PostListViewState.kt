@@ -13,6 +13,6 @@ data class PostListViewState(
 }
 
 sealed class PostListViewAction {
-    data class NavigateToPostDetails(val postId: Int) : PostListViewAction()
+    data class OnPostSelected(val postId: Int) : PostListViewAction()
     object FailedToDeleteAction : PostListViewAction()
 }

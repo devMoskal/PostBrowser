@@ -31,7 +31,7 @@ class PostListViewModel @ViewModelInject constructor(
 
     override fun onClick(item: PostListItem.PostItem, action: PostItemClickListener.Action) {
         when (action) {
-            ITEM_CLICK -> _actions.value = PostListViewAction.NavigateToPostDetails(item.id)
+            ITEM_CLICK -> _actions.value = PostListViewAction.OnPostSelected(item.id)
             DELETE_CLICK -> handleDeleteClick(item)
         }
     }
