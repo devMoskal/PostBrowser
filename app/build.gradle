@@ -16,7 +16,7 @@ android {
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.dev.moskal.postbrowser.HiltTestRunner"
     }
 
     buildTypes {
@@ -36,6 +36,13 @@ android {
 
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+
+    packagingOptions {
+        // workaround a problem with androidTest dependency
+        // https://github.com/Kotlin/kotlinx.coroutines/issues/2023
+        exclude 'META-INF/AL2.0'
+        exclude 'META-INF/LGPL2.1'
     }
 }
 
@@ -67,8 +74,8 @@ dependencies {
     // DI
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
-    kapt "androidx.hilt:hilt-compiler:$hilt_androidx_version"
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_androidx_version"
+    kapt "androidx.hilt:hilt-compiler:$hilt_androidx_version"
 
     // API
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
@@ -93,9 +100,19 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-params:$junit_version"
     testImplementation "com.google.truth:truth:$truth_version"
     testImplementation "io.mockk:mockk:$mockk_version"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutine_test_version"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_core_version"
 
-    // TODO improve test dependency
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    // UI test - not all  are needed yet with hilt, room, and
+    androidTestImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
+    kaptAndroidTest "com.google.dagger:hilt-android-compiler:$hilt_version"
+    kaptAndroidTest "androidx.hilt:hilt-compiler:$hilt_androidx_version"
+    androidTestImplementation "junit:junit:$junit_instrumentation_version"
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_core_version"
+    androidTestImplementation "androidx.test:core-ktx:$androidx_test_version"
+    androidTestImplementation "androidx.test.ext:junit-ktx:$core_testing_version"
+    androidTestImplementation "androidx.test:rules:$androidx_test_rule_version"
+    androidTestImplementation "androidx.room:room-testing:$room_version"
+    androidTestImplementation "androidx.arch.core:core-testing:$arch_testing_version"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:$espresso_version"
 }
