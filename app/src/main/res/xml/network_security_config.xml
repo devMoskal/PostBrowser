@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!-- enable CLEARTEXT communication in debug build to allow usage of MockWebServer -->
-<!-- should be done only for debug build -->
+<!-- should not be done in production build -->
 <network-security-config>
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">jsonplaceholder.typicode.com</domain>

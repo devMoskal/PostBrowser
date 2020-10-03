@@ -73,7 +73,6 @@ class AlbumListReducer @Inject constructor() {
             val albumItem = AlbumItem(album)
             result.add(albumItem)
             val elements = album.photos
-                .take(5) // for debug
                 .map { PhotoItem(it, isVisible = albumItem.isExpanded) }
             cachedFoldableItems[albumItem.id] = elements
         }

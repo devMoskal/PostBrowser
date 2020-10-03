@@ -21,6 +21,7 @@ internal class PostViewHolder(
     fun bind(item: PostListItem.PostItem, clickListener: PostItemClickListener) {
         binding.item = item
         binding.clickListener = clickListener
+        binding.executePendingBindings()
     }
 }
 

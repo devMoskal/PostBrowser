@@ -23,6 +23,7 @@ internal class DetailsHeaderViewHolder(
 
     fun bind(item: DetailsListItem.HeaderItem) {
         binding.item = item
+        binding.executePendingBindings()
     }
 }
 
@@ -36,6 +37,14 @@ internal class AlbumViewHolder(
     fun bind(item: DetailsListItem.AlbumItem, clickListener: AlbumClickListener) {
         binding.item = item
         binding.clickListener = clickListener
+        binding.executePendingBindings()
+    }
+
+    // added to support click from sticky header item decorator
+    fun onClick() {
+        binding.item?.let {
+            binding.clickListener?.onClick(it)
+        }
     }
 }
 
@@ -58,6 +67,7 @@ internal class PhotoViewHolder(
 
     fun bind(item: DetailsListItem.PhotoItem) {
         binding.item = item
+        binding.executePendingBindings()
     }
 
     companion object {

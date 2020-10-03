@@ -21,6 +21,15 @@ class AlbumListAdapter @Inject constructor() :
     ListAdapter<DetailsListItem, RecyclerView.ViewHolder>(AlbumListDiffUtil()) {
     private lateinit var clickListener: AlbumClickListener
 
+    fun isStickyHeader(itemPosition: Int) =
+        itemPosition in 0..itemCount && getItemViewType(itemPosition) == TYPE_ALBUM
+
+    fun onStickyHeaderClick(viewHolder: RecyclerView.ViewHolder) {
+        if (viewHolder is AlbumViewHolder) {
+            viewHolder.onClick()
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             TYPE_DETAILS -> DetailsHeaderViewHolder(parent)

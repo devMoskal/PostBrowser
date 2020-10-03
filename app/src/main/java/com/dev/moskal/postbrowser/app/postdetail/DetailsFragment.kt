@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dev.moskal.postbrowser.app.MainViewModel
+import com.dev.moskal.postbrowser.app.util.StickyHeaderItemDecoration
 import com.dev.moskal.postbrowser.databinding.DetailsFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -44,6 +45,14 @@ class DetailsFragment : Fragment() {
         with(binding.recyclerView) {
             layoutManager = LinearLayoutManager(context)
             adapter = albumListAdapter
+            addItemDecoration(
+                StickyHeaderItemDecoration(
+                    parent = this,
+                    shouldFadeOutHeader = false,
+                    albumListAdapter::onStickyHeaderClick,
+                    albumListAdapter::isStickyHeader
+                )
+            )
         }
     }
 }
