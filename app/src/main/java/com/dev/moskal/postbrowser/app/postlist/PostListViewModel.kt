@@ -2,8 +2,9 @@ package com.dev.moskal.postbrowser.app.postlist
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.map
 import com.dev.moskal.postbrowser.app.postlist.PostItemClickListener.Action.DELETE_CLICK
 import com.dev.moskal.postbrowser.app.postlist.PostItemClickListener.Action.ITEM_CLICK
 import com.dev.moskal.postbrowser.app.util.SingleLiveEvent
@@ -11,6 +12,7 @@ import com.dev.moskal.postbrowser.domain.model.PostInfo
 import com.dev.moskal.postbrowser.domain.model.Resource
 import com.dev.moskal.postbrowser.domain.usecase.DeletePost
 import com.dev.moskal.postbrowser.domain.usecase.GetPostsInfo
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
@@ -20,10 +22,9 @@ class PostListViewModel @ViewModelInject constructor(
     private val deletePost: DeletePost
 ) : ViewModel(), PostItemClickListener {
 
-    val viewState = getPostsInfoInfo.execute()
-        .map(::reducePostListToViewState)
-        .onStart { emit(PostListViewState.LOADING) }
-        .asLiveData()
+    val items: Flow<PagingData<PostListItem>> = getPostsInfoInfo.execute()
+        .mapToItems()
+        .onStart { emit(PagingData.from(PLACEHOLDER_LIST)) }
 
     private val _actions = SingleLiveEvent<PostListViewAction>()
     val actions: SingleLiveEvent<PostListViewAction>
@@ -49,12 +50,12 @@ class PostListViewModel @ViewModelInject constructor(
         }
     }
 
-    private fun reducePostListToViewState(resource: Resource<List<PostInfo>>) =
-        when (resource) {
-            is Resource.Success -> PostListViewState(resource.toItemsList())
-            is Resource.Error -> PostListViewState(isError = true)
-        }
+    private fun Flow<PagingData<PostInfo>>.mapToItems(): Flow<PagingData<PostListItem>> =
+        this.map { it.map(PostListItem::PostItem) }
 
-    private fun Resource.Success<List<PostInfo>>.toItemsList() =
-        data?.map(PostListItem::PostItem) ?: emptyList()
+    companion object {
+        private const val LOADING_PLACEHOLDER_COUNT = 25
+        private val PLACEHOLDER_LIST =
+            List(LOADING_PLACEHOLDER_COUNT) { PostListItem.PostLoadingItem }
+    }
 }

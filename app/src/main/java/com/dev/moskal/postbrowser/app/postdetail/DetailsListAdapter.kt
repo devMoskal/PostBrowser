@@ -57,7 +57,7 @@ class AlbumListAdapter @Inject constructor() :
 
     override fun getItemViewType(position: Int) = getItem(position).type
 
-    private fun update(items: List<DetailsListItem>) {
+    fun update(items: List<DetailsListItem>) {
         submitList(items)
     }
 

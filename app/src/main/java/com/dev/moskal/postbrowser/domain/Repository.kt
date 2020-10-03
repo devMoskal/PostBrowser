@@ -1,5 +1,6 @@
 package com.dev.moskal.postbrowser.domain
 
+import androidx.paging.PagingData
 import com.dev.moskal.postbrowser.domain.model.Album
 import com.dev.moskal.postbrowser.domain.model.Post
 import com.dev.moskal.postbrowser.domain.model.PostInfo
@@ -15,7 +16,7 @@ import kotlinx.coroutines.flow.Flow
 interface Repository {
     suspend fun fetchData(): Resource<Unit>
 
-    fun getPostsInfo(): Flow<Resource<List<PostInfo>>>
+    fun getPostsInfo(): Flow<PagingData<PostInfo>>
     fun getPost(id: Int): Flow<Resource<Post?>>
 
     suspend fun deletePost(id: Int): Resource<Unit>

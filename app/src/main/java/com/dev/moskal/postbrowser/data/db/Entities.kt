@@ -3,6 +3,7 @@ package com.dev.moskal.postbrowser.data.db
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.ForeignKey.CASCADE
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.dev.moskal.postbrowser.data.db.PostBrowserDatabase.Companion.TABLE_ALBUMS
 import com.dev.moskal.postbrowser.data.db.PostBrowserDatabase.Companion.TABLE_PHOTOS
@@ -13,12 +14,14 @@ import com.dev.moskal.postbrowser.data.db.PostBrowserDatabase.Companion.TABLE_US
 // As we don't delete User nor albums foreignKeys are kind of redundant here at this stage.
 
 @Entity(
-    tableName = TABLE_POSTS, foreignKeys = [ForeignKey(
+    tableName = TABLE_POSTS,
+    foreignKeys = [ForeignKey(
         entity = DbUser::class,
         parentColumns = ["userId"],
         childColumns = ["authorUserId"],
         onDelete = CASCADE
-    )]
+    )],
+    indices = [Index(value = ["authorUserId"])],
 )
 data class DbPost(
     @PrimaryKey val postId: Int,
@@ -34,12 +37,14 @@ data class DbUser(
 )
 
 @Entity(
-    tableName = TABLE_ALBUMS, foreignKeys = [ForeignKey(
+    tableName = TABLE_ALBUMS,
+    foreignKeys = [ForeignKey(
         entity = DbUser::class,
         parentColumns = ["userId"],
         childColumns = ["userId"],
         onDelete = CASCADE
-    )]
+    )],
+    indices = [Index(value = ["userId"])],
 )
 data class DbAlbum(
     @PrimaryKey val albumId: Int,
@@ -48,12 +53,14 @@ data class DbAlbum(
 )
 
 @Entity(
-    tableName = TABLE_PHOTOS, foreignKeys = [ForeignKey(
+    tableName = TABLE_PHOTOS,
+    foreignKeys = [ForeignKey(
         entity = DbAlbum::class,
         parentColumns = ["albumId"],
         childColumns = ["parentAlbumId"],
         onDelete = CASCADE
-    )]
+    )],
+    indices = [Index(value = ["parentAlbumId"])],
 )
 data class DbPhoto(
     @PrimaryKey val photoId: Int,

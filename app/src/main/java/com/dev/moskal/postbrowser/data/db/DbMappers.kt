@@ -5,9 +5,9 @@ import com.dev.moskal.postbrowser.domain.model.Photo
 import com.dev.moskal.postbrowser.domain.model.Post
 import com.dev.moskal.postbrowser.domain.model.PostInfo
 
-fun List<DbPostWithUser>.mapPostAndUserDbEntityToDomainModel(): List<PostInfo> = map {
-    PostInfo(it.post.postId, it.post.title, it.user?.email.orEmpty())
-}
+fun DbPostWithUser.mapPostAndUserDbEntityToDomainModel() =
+    PostInfo(post.postId, post.title, user?.email.orEmpty())
+
 
 fun DbPost?.mapPostDbEntityToDomainModel(): Post? =
     this?.run { Post(postId, title, body, authorUserId) }

@@ -5,15 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dev.moskal.postbrowser.R
 import com.dev.moskal.postbrowser.app.MainViewModel
 import com.dev.moskal.postbrowser.databinding.PostListFragmentBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -38,10 +43,19 @@ class PostListFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         binding.apply {
-            viewState = viewModel.viewState
             clickListener = viewModel
             lifecycleOwner = viewLifecycleOwner
         }
+        lifecycleScope.launch {
+            viewModel.items.collect {
+                postAdapter.submitData(it)
+            }
+        }
+        observeActions()
+        handleLoadingErrors()
+    }
+
+    private fun observeActions() {
         viewModel.actions.observe(viewLifecycleOwner) {
             when (it) {
                 PostListViewAction.FailedToDeleteAction -> showSnackbar(R.string.unable_to_delete_post)
@@ -61,6 +75,29 @@ class PostListFragment : Fragment() {
                 getString(stringRes),
                 Snackbar.LENGTH_SHORT
             ).show()
+        }
+    }
+
+
+    private fun handleLoadingErrors() {
+        binding.apply {
+            postAdapter.addLoadStateListener { loadState ->
+                /*
+                 * note: that is one of the reason I am not a fan of Paging library:
+                 * loading state and errors are part of adapter
+                 * making more and more code going int fragment,
+                 * instead of using clear viewState pattern from viewModel as a single source of truth
+                 */
+                errorView.isVisible = loadState.source.refresh is LoadState.Error
+                val uncriticalError = loadState.source.append as? LoadState.Error
+                    ?: loadState.source.prepend as? LoadState.Error
+                    ?: loadState.append as? LoadState.Error
+                    ?: loadState.prepend as? LoadState.Error
+                uncriticalError?.let {
+                    showSnackbar(R.string.unable_to_load_more_post)
+                }
+            }
+            errorView.setOnClickListener { postAdapter.retry() }
         }
     }
 

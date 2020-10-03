@@ -48,7 +48,7 @@ class RepositoryModule {
             api,
             dao,
             List<PostApiResponse>::mapPostApiResponseToDbEntity,
-            List<DbPostWithUser>::mapPostAndUserDbEntityToDomainModel,
+            DbPostWithUser::mapPostAndUserDbEntityToDomainModel,
             DbPost?::mapPostDbEntityToDomainModel,
         )
 

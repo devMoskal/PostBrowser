@@ -1,5 +1,6 @@
 package com.dev.moskal.postbrowser.data.db
 
+import androidx.paging.DataSource
 import androidx.room.*
 import com.dev.moskal.postbrowser.data.db.PostBrowserDatabase.Companion.TABLE_ALBUMS
 import com.dev.moskal.postbrowser.data.db.PostBrowserDatabase.Companion.TABLE_POSTS
@@ -40,7 +41,7 @@ interface PostBrowserDao {
 
     @Transaction
     @Query("SELECT * FROM $TABLE_POSTS")
-    fun getPostWithUser(): Flow<List<DbPostWithUser>>
+    fun getPostWithUser(): DataSource.Factory<Int, DbPostWithUser>
 
     @Transaction
     @Query("SELECT * FROM $TABLE_ALBUMS WHERE userId = :userId")
