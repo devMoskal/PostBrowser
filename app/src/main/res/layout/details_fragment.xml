@@ -26,14 +26,28 @@
             android:animateLayoutChanges="true">
 
             <TextView
-                android:id="@+id/errorLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@{viewState.isPostSelected() ? @string/no_selected_post : @string/error}"
+                android:text="@string/no_selected_post"
                 android:textSize="@dimen/text_size_large"
-                android:textStyle="bold"
-                android:textColor="@color/text_dark"
-                android:visibility="@{(viewState.isError() || !viewState.isPostSelected()) ? View.VISIBLE : View.GONE}"
+                android:padding="@dimen/margin_general"
+                android:gravity="center"
+                android:textColor="@color/secondary_text"
+                android:visibility="@{viewState.isPostNotSelected() ? View.VISIBLE : View.GONE}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Title 1" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/error"
+                android:textSize="@dimen/text_size_large"
+                android:padding="@dimen/margin_general"
+                android:gravity="center"
+                android:textColor="@color/secondary_text"
+                android:visibility="@{viewState.isError() ? View.VISIBLE : View.GONE}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

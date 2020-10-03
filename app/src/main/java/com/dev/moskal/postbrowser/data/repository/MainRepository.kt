@@ -34,9 +34,8 @@ internal class MainRepository(
 
     override fun getPostsInfo() = postRepository.getPostsInfo().asResourceFlow()
 
-    override suspend fun getPost(id: Int) = asResource {
-        postRepository.getPost(id)
-    }
+
+    override fun getPost(id: Int) = postRepository.getPost(id).asResourceFlow()
 
     override suspend fun getUserAlbums(userId: Int) = asResource {
         albumRepository.getAlbumsForUser(userId)

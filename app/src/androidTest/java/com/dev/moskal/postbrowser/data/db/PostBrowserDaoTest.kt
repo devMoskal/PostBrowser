@@ -37,7 +37,7 @@ class PostBrowserDaoTest {
         val postId = testPosts[0].postId
 
         // when
-        val post = dao.getPost(postId)
+        val post = dao.getPost(postId).first()
 
         // then
         assertThat(post).isEqualTo(testPosts[0])
@@ -62,7 +62,7 @@ class PostBrowserDaoTest {
         val newPost = DbPost(conflictingId, 1, "other", "changed")
         // when
         dao.insertPosts(listOf(newPost))
-        val postInDb = dao.getPost(conflictingId)
+        val postInDb = dao.getPost(conflictingId).first()
 
         // then
         assertThat(postInDb).isEqualTo(newPost)
@@ -74,7 +74,7 @@ class PostBrowserDaoTest {
         val idToDelete = 2
         // when
         dao.deletePost(idToDelete)
-        val deletedPost = dao.getPost(idToDelete)
+        val deletedPost = dao.getPost(idToDelete).first()
         val postWithUser = dao.getPostWithUser().first()
 
         // then
@@ -112,9 +112,9 @@ class PostBrowserDaoTest {
         val userIdToDelete = 0
         // when
         dao.deleteUser(userIdToDelete)
-        val deletedPost = dao.getPost(0)
-        val anotherDeletedPost = dao.getPost(1)
-        val remainingPost = dao.getPost(2)
+        val deletedPost = dao.getPost(0).first()
+        val anotherDeletedPost = dao.getPost(1).first()
+        val remainingPost = dao.getPost(2).first()
 
         // then
         assertThat(deletedPost).isNull()

@@ -23,13 +23,15 @@ import javax.inject.Inject
  * Solution was implemented just for sake of coding challenge
  * so for sure it can be further improved and need to be harden and unit-tested(!)
  *
- * TODO: further refactor solution to be more generic
+ * TODO: further refactor solution to be more generic, add tests
  */
 class AlbumListReducer @Inject constructor() {
 
     private val cachedFoldableItems = HashMap<AlbumItemId, List<PhotoItem>>()
 
-    fun reducePost(post: Post) = DetailsViewState(listOf(DetailsListItem.HeaderItem(post)))
+    fun reducePost(post: Post?) = post?.let {
+        DetailsViewState(listOf(DetailsListItem.HeaderItem(it)))
+    } ?: DetailsViewState.NO_POST_SELECTED
 
     suspend fun reduceAlbums(header: DetailsListItem?, albums: List<Album>) =
         withContext(Dispatchers.Default) {

@@ -7,9 +7,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dev.moskal.postbrowser.domain.model.POST_NOT_SELECTED_ID
 import com.dev.moskal.postbrowser.domain.model.Post
+import com.dev.moskal.postbrowser.domain.model.Resource
 import com.dev.moskal.postbrowser.domain.usecase.GetPost
 import com.dev.moskal.postbrowser.domain.usecase.GetUserAlbums
+import com.dev.moskal.postbrowser.domain.utils.filterWithSideEffect
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 internal typealias AlbumItemId = Int
 
@@ -23,15 +29,27 @@ class DetailsViewModel @ViewModelInject constructor(
     val viewState: LiveData<DetailsViewState>
         get() = _viewState
 
-    private var currentPostId: Int = POST_NOT_SELECTED_ID
+    private var currentPostId: Int? = null
+    private var observePostJob: Job? = null
+
+    init {
+        _viewState.observeForever {
+            it
+                .apply { Timber.i("__ isError=${this.isError} isLoading=${this.isLoading} isPostNotSelected=${this.isPostNotSelected} listSize=${this.items.size}") }
+        }
+    }
+
 
     fun selectPost(postId: Int?) {
+        Timber.i("__ select post ${postId}")
         if (postId == currentPostId) return
         currentPostId = postId ?: POST_NOT_SELECTED_ID
         if (postId == null || postId == POST_NOT_SELECTED_ID) {
             _viewState.value = DetailsViewState.NO_POST_SELECTED
         } else {
-            loadPost(postId)
+            _viewState.value = DetailsViewState.LOADING
+            observePostJob?.cancel()
+            observePostJob = observePost(postId)
         }
     }
 
@@ -44,18 +62,26 @@ class DetailsViewModel @ViewModelInject constructor(
         }
     }
 
-    private fun loadPost(postId: Int) = viewModelScope.launch {
-        val post = getPost.execute(postId).data
-        if (post != null) {
-            _viewState.value = reducer.reducePost(post)
-            loadAlbums(post)
-        } else {
-            handleError()
+    private fun observePost(postId: Int) = viewModelScope.launch {
+        getPost.execute(postId)
+            .filterWithSideEffect({ it is Resource.Success }) {
+                handleError()
+                Timber.i("### res is error")
+            }
+            .map { it.data }
+            .collect(::handlePostReceived)
+    }
+
+    private suspend fun handlePostReceived(post: Post?) {
+        Timber.i("### $post")
+        _viewState.value = reducer.reducePost(post)
+        post?.let {
+            loadAlbums(it.userId)
         }
     }
 
-    private suspend fun loadAlbums(post: Post) {
-        val albums = getUserAlbums.execute(post.userId).data
+    private suspend fun loadAlbums(userId: Int) {
+        val albums = getUserAlbums.execute(userId).data
         if (albums != null) {
             val header = _viewState.value?.items?.first()
             _viewState.value = reducer.reduceAlbums(header, albums)

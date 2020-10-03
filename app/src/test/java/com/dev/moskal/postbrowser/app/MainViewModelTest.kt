@@ -13,7 +13,7 @@ internal class MainViewModelTest : BaseTest() {
         // given
         val initialFetch = mockk<InitialFetch>(relaxed = true)
         // when
-        MainViewModel(initialFetch)
+        MainViewModel(initialFetch, mockk())
         // then
         coCalledOnce { initialFetch.execute() }
     }

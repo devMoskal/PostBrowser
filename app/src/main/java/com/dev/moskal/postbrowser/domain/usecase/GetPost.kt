@@ -5,5 +5,5 @@ import javax.inject.Inject
 
 class GetPost @Inject constructor(val repository: Repository) {
 
-    suspend fun execute(id: Int) = repository.getPost(id)
+    fun execute(id: Int) = repository.getPost(id)
 }

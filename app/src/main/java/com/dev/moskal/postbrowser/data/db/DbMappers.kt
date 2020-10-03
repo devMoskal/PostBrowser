@@ -9,7 +9,8 @@ fun List<DbPostWithUser>.mapPostAndUserDbEntityToDomainModel(): List<PostInfo> =
     PostInfo(it.post.postId, it.post.title, it.user?.email.orEmpty())
 }
 
-fun DbPost.mapPostDbEntityToDomainModel(): Post = Post(postId, title, body, authorUserId)
+fun DbPost?.mapPostDbEntityToDomainModel(): Post? =
+    this?.run { Post(postId, title, body, authorUserId) }
 
 fun List<DbAlbumWithPhotos>.mapAlbumWithPhotosDbEntityToDomainModel(): List<Album> =
     map { (album, photos) ->

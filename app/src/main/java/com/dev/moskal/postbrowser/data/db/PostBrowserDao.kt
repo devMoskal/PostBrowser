@@ -36,7 +36,7 @@ interface PostBrowserDao {
     suspend fun deletePost(id: Int)
 
     @Query("SELECT * FROM $TABLE_POSTS WHERE postId = :id")
-    suspend fun getPost(id: Int): DbPost?
+    fun getPost(id: Int): Flow<DbPost?>
 
     @Transaction
     @Query("SELECT * FROM $TABLE_POSTS")
