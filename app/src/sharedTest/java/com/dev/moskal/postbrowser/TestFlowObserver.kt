@@ -30,6 +30,11 @@ class TestFlowObserver<T>(
         return this
     }
 
+    fun assertHasSize(size: Int): TestFlowObserver<T> {
+        assertThat(size).isEqualTo(this.values.size)
+        return this
+    }
+
     fun finish() {
         job.cancel()
     }

@@ -1,7 +1,6 @@
 package com.dev.moskal.postbrowser.data.db
 
 import com.dev.moskal.postbrowser.DatabaseTestRule
-import com.dev.moskal.postbrowser.test
 import com.dev.moskal.postbrowser.testPosts
 import com.dev.moskal.postbrowser.testUsers
 import com.google.common.truth.Truth.assertThat
@@ -44,18 +43,6 @@ class PostBrowserDaoTest {
     }
 
     @Test
-    fun testGetPostWithUserRelationship() = runDbTest {
-        // when
-        val postWithUser = dao.getPostWithUser().first()
-
-        // then
-        assertThat(postWithUser).hasSize(testPosts.size)
-        assertThat(postWithUser[0]).isEqualTo(DbPostWithUser(testPosts[0], testUsers[0]))
-        assertThat(postWithUser[1]).isEqualTo(DbPostWithUser(testPosts[1], testUsers[0]))
-        assertThat(postWithUser[2]).isEqualTo(DbPostWithUser(testPosts[2], testUsers[1]))
-    }
-
-    @Test
     fun testInsertPostReplaceOnConflict() = runDbTest {
         //given
         val conflictingId = 0
@@ -75,35 +62,9 @@ class PostBrowserDaoTest {
         // when
         dao.deletePost(idToDelete)
         val deletedPost = dao.getPost(idToDelete).first()
-        val postWithUser = dao.getPostWithUser().first()
 
         // then
         assertThat(deletedPost).isNull()
-        assertThat(postWithUser).hasSize(testPosts.size - 1)
-        assertThat(postWithUser[0]).isEqualTo(DbPostWithUser(testPosts[0], testUsers[0]))
-        assertThat(postWithUser[1]).isEqualTo(DbPostWithUser(testPosts[1], testUsers[0]))
-        assertThat(postWithUser).doesNotContain(DbPostWithUser(testPosts[2], testUsers[1]))
-    }
-
-    @Test
-    fun testGetPostInfoReturnsNewDataWhenDbIsUpdated() = runDbTest {
-        //given
-        val newPost = DbPost(4, testUsers[1].userId, "test4", "test4b")
-        val initialList = mutableListOf(
-            DbPostWithUser(testPosts[0], testUsers[0]),
-            DbPostWithUser(testPosts[1], testUsers[0]),
-            DbPostWithUser(testPosts[2], testUsers[1]),
-        )
-
-        // when
-        val testObserver = dao.getPostWithUser().test(databaseRule.testScope)
-        dao.insertPosts(listOf(newPost))
-
-        // then
-        testObserver.assertValues(
-            initialList,
-            initialList.plus(DbPostWithUser(newPost, testUsers[1]))
-        )
     }
 
     @Test

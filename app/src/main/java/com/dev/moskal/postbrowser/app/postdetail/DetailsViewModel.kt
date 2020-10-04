@@ -24,7 +24,8 @@ class DetailsViewModel @ViewModelInject constructor(
     private val reducer: AlbumListReducer
 ) : ViewModel(), AlbumClickListener {
 
-    private val _viewState = MutableLiveData(DetailsViewState.LOADING)
+    private val _viewState: MutableLiveData<DetailsViewState> =
+        MutableLiveData(DetailsViewState.LoadingState)
     val viewState: LiveData<DetailsViewState>
         get() = _viewState
 
@@ -35,9 +36,9 @@ class DetailsViewModel @ViewModelInject constructor(
         if (postId == currentPostId) return
         currentPostId = postId ?: POST_NOT_SELECTED_ID
         if (postId == null || postId == POST_NOT_SELECTED_ID) {
-            _viewState.value = DetailsViewState.NO_POST_SELECTED
+            _viewState.value = DetailsViewState.PostNotSelectedState
         } else {
-            _viewState.value = DetailsViewState.LOADING
+            _viewState.value = DetailsViewState.LoadingState
             observePostJob?.cancel()
             observePostJob = observePost(postId)
         }
@@ -82,6 +83,6 @@ class DetailsViewModel @ViewModelInject constructor(
     private fun handleError() {
         // error handling should be a bit more sophisticated to handle each error differently
         // done for simplicity in sample app
-        _viewState.value = DetailsViewState.ERROR
+        _viewState.value = DetailsViewState.ErrorState
     }
 }

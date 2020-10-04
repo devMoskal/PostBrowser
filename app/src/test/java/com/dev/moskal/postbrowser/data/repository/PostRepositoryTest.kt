@@ -3,11 +3,12 @@ package com.dev.moskal.postbrowser.data.repository
 import com.dev.moskal.postbrowser.BaseTest
 import com.dev.moskal.postbrowser.data.db.PostBrowserDao
 import com.dev.moskal.postbrowser.data.network.api.PostApi
-import com.dev.moskal.postbrowser.domain.model.PostInfo
 import com.google.common.truth.Truth.assertThat
-import io.mockk.*
+import io.mockk.Called
+import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
-import kotlinx.coroutines.flow.flowOf
+import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.jupiter.api.BeforeEach
@@ -35,7 +36,7 @@ internal class PostRepositoryTest : BaseTest() {
             mockService,
             mockDao,
             { map { mockk() } },
-            { map { mockk() } },
+            { mockk() },
         ) { mockk() }
     }
 
@@ -76,42 +77,6 @@ internal class PostRepositoryTest : BaseTest() {
     }
 
     @Test
-    fun `when dao returns fix number of post then get all of them`() = runBlockingTest {
-        // given
-        every { mockDao.getPostWithUser() } returns flowOf(
-            listOf(
-                mockk(relaxed = true),
-                mockk(relaxed = true)
-            )
-        )
-
-        // when
-        val posts = repository.getPostsInfo(query).toList()
-
-        // then
-        assertThat(posts).isNotEmpty()
-        assertThat(posts[0][0]).isInstanceOf(PostInfo::class.java)
-    }
-
-    @Test
-    fun `when dao emits several responses then get all of them`() = runBlockingTest {
-        // given
-        every { mockDao.getPostWithUser() } returns flowOf(
-            listOf(mockk(relaxed = true), mockk(relaxed = true)),
-            listOf(mockk(relaxed = true), mockk(relaxed = true)),
-            listOf(mockk(relaxed = true)),
-            emptyList(),
-            listOf(mockk(relaxed = true))
-        )
-
-        // when
-        val posts = repository.getPostsInfo(query).toList()
-
-        // then
-        assertThat(posts).hasSize(5)
-    }
-
-    @Test
     fun `when dao throws error then propagate error response`() {
         // given
         coEvery { mockService.getPosts() } throws RuntimeException("")
@@ -119,7 +84,7 @@ internal class PostRepositoryTest : BaseTest() {
         // then
         assertThrows<RuntimeException> {
             runBlockingTest {
-                repository.getPostsInfo(query).toList()
+                repository.getPostsInfo("").toList()
             }
         }
     }

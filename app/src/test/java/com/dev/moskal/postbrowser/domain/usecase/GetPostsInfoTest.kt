@@ -1,11 +1,11 @@
 package com.dev.moskal.postbrowser.domain.usecase
 
+import androidx.paging.PagingData
 import com.dev.moskal.postbrowser.BaseTest
 import com.dev.moskal.postbrowser.coCalledOnce
 import com.dev.moskal.postbrowser.coWasNotCalled
 import com.dev.moskal.postbrowser.domain.Repository
 import com.dev.moskal.postbrowser.domain.model.PostInfo
-import com.dev.moskal.postbrowser.domain.model.Resource
 import com.dev.moskal.postbrowser.domain.model.SyncState
 import com.dev.moskal.postbrowser.test
 import com.google.common.truth.Truth.assertThat
@@ -41,10 +41,10 @@ internal class GetPostsInfoTest : BaseTest() {
         // given
         coEvery { fetchData.syncState.value } returns SyncState.NOT_STARTED
         // when
-        val result = getPostsInfo.execute().toList()
+        val result = getPostsInfo.execute("").toList()
         // then
         assertThat(result).isEmpty()
-        coWasNotCalled { mockRepository.getPostsInfo(query) }
+        coWasNotCalled { mockRepository.getPostsInfo(any()) }
     }
 
     @Test
@@ -52,33 +52,33 @@ internal class GetPostsInfoTest : BaseTest() {
         // given
         coEvery { fetchData.syncState.value } returns SyncState.IN_PROGRESS
         // when
-        val result = getPostsInfo.execute().toList()
+        val result = getPostsInfo.execute("").toList()
         // then
         assertThat(result).isEmpty()
-        coWasNotCalled { mockRepository.getPostsInfo(query) }
+        coWasNotCalled { mockRepository.getPostsInfo(any()) }
     }
 
     @Test
     fun `when sync is finished then query repository and emit responses`() = runBlockingTest {
         // given
-        val repositoryData = Resource.Success(mockk<List<PostInfo>>())
+        val repositoryData = PagingData.from(mockk<List<PostInfo>>())
         val subject = MutableStateFlow(SyncState.NOT_STARTED)
         coEvery { fetchData.syncState } returns subject
-        coEvery { mockRepository.getPostsInfo(query) } returns flowOf(repositoryData)
+        coEvery { mockRepository.getPostsInfo("") } returns flowOf(repositoryData)
         // when - then
 
-        val observer = getPostsInfo.execute().test(this)
+        val observer = getPostsInfo.execute("").test(this)
         observer.assertNoValues()
-        coWasNotCalled { mockRepository.getPostsInfo(query) }
+        coWasNotCalled { mockRepository.getPostsInfo(any()) }
 
         subject.value = SyncState.IN_PROGRESS
         observer.assertNoValues()
-        coWasNotCalled { mockRepository.getPostsInfo(query) }
+        coWasNotCalled { mockRepository.getPostsInfo(any()) }
 
         subject.value = SyncState.SUCCESS
 
         // then
-        coCalledOnce { mockRepository.getPostsInfo(query) }
+        coCalledOnce { mockRepository.getPostsInfo("") }
         observer.assertValues(repositoryData)
         observer.finish()
     }

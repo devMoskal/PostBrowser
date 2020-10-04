@@ -1,5 +1,6 @@
 package com.dev.moskal.postbrowser.data.repository
 
+import androidx.paging.PagingData
 import com.dev.moskal.postbrowser.BaseTest
 import com.dev.moskal.postbrowser.coCalledOnce
 import com.dev.moskal.postbrowser.coWasNotCalled
@@ -149,35 +150,36 @@ internal class MainRepositoryTest : BaseTest() {
         @Test
         fun `when post repo returns fix number of post then get all of them`() = runBlocking {
             // given
-            every { mockPostRepository.getPostsInfo(query) } returns flowOf(
-                listOf(
-                    mockk(relaxed = true),
-                    mockk(relaxed = true)
+            every { mockPostRepository.getPostsInfo(any()) } returns flowOf(
+                PagingData.from(
+                    listOf(
+                        mockk(relaxed = true),
+                        mockk(relaxed = true)
+                    )
                 )
             )
 
             // when
-            val posts = repository.getPostsInfo(query).toList()
+            val posts = repository.getPostsInfo("").toList()
 
             // then
             assertThat(posts).isNotEmpty()
-            assertThat(posts[0].isSuccess())
-            assertThat((posts[0] as Resource.Success).data).hasSize(2)
+            assertThat(posts[0]).isInstanceOf(PagingData::class.java)
         }
 
         @Test
         fun `when post repo emits several responses then get all of them`() = runBlocking {
             // given
-            every { mockPostRepository.getPostsInfo(query) } returns flowOf(
-                listOf(mockk(relaxed = true), mockk(relaxed = true)),
-                listOf(mockk(relaxed = true), mockk(relaxed = true)),
-                listOf(mockk(relaxed = true)),
-                emptyList(),
-                listOf(mockk(relaxed = true))
+            every { mockPostRepository.getPostsInfo(any()) } returns flowOf(
+                PagingData.from(listOf(mockk(relaxed = true), mockk(relaxed = true))),
+                PagingData.from(listOf(mockk(relaxed = true), mockk(relaxed = true))),
+                PagingData.from(listOf(mockk(relaxed = true))),
+                PagingData.from(emptyList()),
+                PagingData.from(listOf(mockk(relaxed = true)))
             )
 
             // when
-            val posts = repository.getPostsInfo(query).toList()
+            val posts = repository.getPostsInfo("").toList()
 
             // then
             assertThat(posts).hasSize(5)
@@ -186,12 +188,12 @@ internal class MainRepositoryTest : BaseTest() {
         @Test
         fun `when dao throws error then propagate error response`() {
             // given
-            coEvery { mockPostRepository.getPostsInfo(query) } throws RuntimeException("")
+            coEvery { mockPostRepository.getPostsInfo(any()) } throws RuntimeException("")
 
             // then
             assertThrows<RuntimeException> {
                 runBlocking {
-                    repository.getPostsInfo(query).toList()
+                    repository.getPostsInfo("").toList()
                 }
             }
         }

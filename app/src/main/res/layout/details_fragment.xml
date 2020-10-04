@@ -9,6 +9,7 @@
         <import type="androidx.lifecycle.LiveData" />
 
         <import type="com.dev.moskal.postbrowser.app.postdetail.DetailsViewState" />
+        <import type="com.dev.moskal.postbrowser.app.postdetail.DetailsViewState.PostNotSelectedState" />
 
         <variable
             name="viewState"
@@ -33,7 +34,7 @@
                 android:padding="@dimen/margin_general"
                 android:gravity="center"
                 android:textColor="@color/secondary_text"
-                android:visibility="@{viewState.isPostNotSelected() ? View.VISIBLE : View.GONE}"
+                android:visibility="@{viewState instanceof PostNotSelectedState ? View.VISIBLE : View.GONE}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -47,7 +48,7 @@
                 android:padding="@dimen/margin_general"
                 android:gravity="center"
                 android:textColor="@color/secondary_text"
-                android:visibility="@{viewState.isError() ? View.VISIBLE : View.GONE}"
+                app:errorVisibility="@{viewState}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

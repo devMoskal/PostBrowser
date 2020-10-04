@@ -2,6 +2,7 @@ package com.dev.moskal.postbrowser.app.postdetail
 
 import com.dev.moskal.postbrowser.app.postdetail.DetailsListItem.AlbumItem
 import com.dev.moskal.postbrowser.app.postdetail.DetailsListItem.PhotoItem
+import com.dev.moskal.postbrowser.app.postdetail.DetailsViewState.DataLoaded
 import com.dev.moskal.postbrowser.domain.model.Album
 import com.dev.moskal.postbrowser.domain.model.Post
 import kotlinx.coroutines.Dispatchers
@@ -30,12 +31,12 @@ class AlbumListReducer @Inject constructor() {
     private val cachedFoldableItems = HashMap<AlbumItemId, List<PhotoItem>>()
 
     fun reducePost(post: Post?) = post?.let {
-        DetailsViewState(listOf(DetailsListItem.HeaderItem(it)))
-    } ?: DetailsViewState.NO_POST_SELECTED
+        DataLoaded(listOf(DetailsListItem.HeaderItem(it)))
+    } ?: DetailsViewState.PostNotSelectedState
 
     suspend fun reduceAlbums(header: DetailsListItem?, albums: List<Album>) =
         withContext(Dispatchers.Default) {
-            DetailsViewState(convertAlbumsToItems(header, albums))
+            DataLoaded(convertAlbumsToItems(header, albums))
         }
 
     suspend fun reduceAfterAlbumClick(list: List<DetailsListItem>, album: AlbumItem) =
@@ -59,7 +60,7 @@ class AlbumListReducer @Inject constructor() {
                 }
             }
 
-            DetailsViewState(itemList)
+            DataLoaded(itemList)
         }
 
 
