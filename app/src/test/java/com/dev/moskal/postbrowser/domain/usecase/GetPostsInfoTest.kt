@@ -44,7 +44,7 @@ internal class GetPostsInfoTest : BaseTest() {
         val result = getPostsInfo.execute().toList()
         // then
         assertThat(result).isEmpty()
-        coWasNotCalled { mockRepository.getPostsInfo() }
+        coWasNotCalled { mockRepository.getPostsInfo(query) }
     }
 
     @Test
@@ -55,7 +55,7 @@ internal class GetPostsInfoTest : BaseTest() {
         val result = getPostsInfo.execute().toList()
         // then
         assertThat(result).isEmpty()
-        coWasNotCalled { mockRepository.getPostsInfo() }
+        coWasNotCalled { mockRepository.getPostsInfo(query) }
     }
 
     @Test
@@ -64,21 +64,21 @@ internal class GetPostsInfoTest : BaseTest() {
         val repositoryData = Resource.Success(mockk<List<PostInfo>>())
         val subject = MutableStateFlow(SyncState.NOT_STARTED)
         coEvery { fetchData.syncState } returns subject
-        coEvery { mockRepository.getPostsInfo() } returns flowOf(repositoryData)
+        coEvery { mockRepository.getPostsInfo(query) } returns flowOf(repositoryData)
         // when - then
 
         val observer = getPostsInfo.execute().test(this)
         observer.assertNoValues()
-        coWasNotCalled { mockRepository.getPostsInfo() }
+        coWasNotCalled { mockRepository.getPostsInfo(query) }
 
         subject.value = SyncState.IN_PROGRESS
         observer.assertNoValues()
-        coWasNotCalled { mockRepository.getPostsInfo() }
+        coWasNotCalled { mockRepository.getPostsInfo(query) }
 
         subject.value = SyncState.SUCCESS
 
         // then
-        coCalledOnce { mockRepository.getPostsInfo() }
+        coCalledOnce { mockRepository.getPostsInfo(query) }
         observer.assertValues(repositoryData)
         observer.finish()
     }

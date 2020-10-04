@@ -40,8 +40,8 @@ interface PostBrowserDao {
     fun getPost(id: Int): Flow<DbPost?>
 
     @Transaction
-    @Query("SELECT * FROM $TABLE_POSTS")
-    fun getPostWithUser(): DataSource.Factory<Int, DbPostWithUser>
+    @Query("SELECT * FROM $TABLE_POSTS WHERE title LIKE '%' || :query || '%'")
+    fun getPostWithUser(query: String): DataSource.Factory<Int, DbPostWithUser>
 
     @Transaction
     @Query("SELECT * FROM $TABLE_ALBUMS WHERE userId = :userId")

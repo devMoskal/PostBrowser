@@ -22,12 +22,12 @@ internal class PostRepository constructor(
 ) {
     suspend fun fetchData(): List<DbPost> = postApi.getPosts().mapApiResponseToDbEntity()
 
-    fun getPostsInfo() = Pager(
+    fun getPostsInfo(query: String) = Pager(
         config = PagingConfig(
             pageSize = 15,
             enablePlaceholders = false
         ),
-        pagingSourceFactory = dao.getPostWithUser().asPagingSourceFactory(),
+        pagingSourceFactory = dao.getPostWithUser(query).asPagingSourceFactory(),
     ).flow.map { pagingData ->
         pagingData.map(mapPostInfoDbEntityToDomainModelWithUser::invoke)
     }

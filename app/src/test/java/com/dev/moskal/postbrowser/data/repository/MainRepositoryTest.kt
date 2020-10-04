@@ -149,7 +149,7 @@ internal class MainRepositoryTest : BaseTest() {
         @Test
         fun `when post repo returns fix number of post then get all of them`() = runBlocking {
             // given
-            every { mockPostRepository.getPostsInfo() } returns flowOf(
+            every { mockPostRepository.getPostsInfo(query) } returns flowOf(
                 listOf(
                     mockk(relaxed = true),
                     mockk(relaxed = true)
@@ -157,7 +157,7 @@ internal class MainRepositoryTest : BaseTest() {
             )
 
             // when
-            val posts = repository.getPostsInfo().toList()
+            val posts = repository.getPostsInfo(query).toList()
 
             // then
             assertThat(posts).isNotEmpty()
@@ -168,7 +168,7 @@ internal class MainRepositoryTest : BaseTest() {
         @Test
         fun `when post repo emits several responses then get all of them`() = runBlocking {
             // given
-            every { mockPostRepository.getPostsInfo() } returns flowOf(
+            every { mockPostRepository.getPostsInfo(query) } returns flowOf(
                 listOf(mockk(relaxed = true), mockk(relaxed = true)),
                 listOf(mockk(relaxed = true), mockk(relaxed = true)),
                 listOf(mockk(relaxed = true)),
@@ -177,7 +177,7 @@ internal class MainRepositoryTest : BaseTest() {
             )
 
             // when
-            val posts = repository.getPostsInfo().toList()
+            val posts = repository.getPostsInfo(query).toList()
 
             // then
             assertThat(posts).hasSize(5)
@@ -186,12 +186,12 @@ internal class MainRepositoryTest : BaseTest() {
         @Test
         fun `when dao throws error then propagate error response`() {
             // given
-            coEvery { mockPostRepository.getPostsInfo() } throws RuntimeException("")
+            coEvery { mockPostRepository.getPostsInfo(query) } throws RuntimeException("")
 
             // then
             assertThrows<RuntimeException> {
                 runBlocking {
-                    repository.getPostsInfo().toList()
+                    repository.getPostsInfo(query).toList()
                 }
             }
         }

@@ -32,7 +32,7 @@ internal class MainRepository(
         }
     }
 
-    override fun getPostsInfo() = postRepository.getPostsInfo()
+    override fun getPostsInfo(query: String) = postRepository.getPostsInfo(query)
 
 
     override fun getPost(id: Int) = postRepository.getPost(id).asResourceFlow()

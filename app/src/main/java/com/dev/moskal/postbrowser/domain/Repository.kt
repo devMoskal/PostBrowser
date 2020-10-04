@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.Flow
 interface Repository {
     suspend fun fetchData(): Resource<Unit>
 
-    fun getPostsInfo(): Flow<PagingData<PostInfo>>
+    fun getPostsInfo(query: String): Flow<PagingData<PostInfo>>
     fun getPost(id: Int): Flow<Resource<Post?>>
 
     suspend fun deletePost(id: Int): Resource<Unit>

@@ -14,8 +14,8 @@ class GetPostsInfo @Inject constructor(
     private val fetchData: FetchData
 ) {
 
-    fun execute(): Flow<PagingData<PostInfo>> =
+    fun execute(query: String): Flow<PagingData<PostInfo>> =
         fetchData.syncState
             .filterNot { it == SyncState.NOT_STARTED || it == SyncState.IN_PROGRESS }
-            .flatMapLatest { repository.getPostsInfo() }
+            .flatMapLatest { repository.getPostsInfo(query) }
 }

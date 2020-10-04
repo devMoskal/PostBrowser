@@ -86,7 +86,7 @@ internal class PostRepositoryTest : BaseTest() {
         )
 
         // when
-        val posts = repository.getPostsInfo().toList()
+        val posts = repository.getPostsInfo(query).toList()
 
         // then
         assertThat(posts).isNotEmpty()
@@ -105,7 +105,7 @@ internal class PostRepositoryTest : BaseTest() {
         )
 
         // when
-        val posts = repository.getPostsInfo().toList()
+        val posts = repository.getPostsInfo(query).toList()
 
         // then
         assertThat(posts).hasSize(5)
@@ -119,7 +119,7 @@ internal class PostRepositoryTest : BaseTest() {
         // then
         assertThrows<RuntimeException> {
             runBlockingTest {
-                repository.getPostsInfo().toList()
+                repository.getPostsInfo(query).toList()
             }
         }
     }

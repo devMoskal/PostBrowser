@@ -15,7 +15,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 internal typealias AlbumItemId = Int
 
@@ -32,16 +31,7 @@ class DetailsViewModel @ViewModelInject constructor(
     private var currentPostId: Int? = null
     private var observePostJob: Job? = null
 
-    init {
-        _viewState.observeForever {
-            it
-                .apply { Timber.i("__ isError=${this.isError} isLoading=${this.isLoading} isPostNotSelected=${this.isPostNotSelected} listSize=${this.items.size}") }
-        }
-    }
-
-
     fun selectPost(postId: Int?) {
-        Timber.i("__ select post ${postId}")
         if (postId == currentPostId) return
         currentPostId = postId ?: POST_NOT_SELECTED_ID
         if (postId == null || postId == POST_NOT_SELECTED_ID) {
@@ -66,14 +56,12 @@ class DetailsViewModel @ViewModelInject constructor(
         getPost.execute(postId)
             .filterWithSideEffect({ it is Resource.Success }) {
                 handleError()
-                Timber.i("### res is error")
             }
             .map { it.data }
             .collect(::handlePostReceived)
     }
 
     private suspend fun handlePostReceived(post: Post?) {
-        Timber.i("### $post")
         _viewState.value = reducer.reducePost(post)
         post?.let {
             loadAlbums(it.userId)

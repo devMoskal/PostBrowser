@@ -5,20 +5,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dev.moskal.postbrowser.R
 import com.dev.moskal.postbrowser.app.MainViewModel
 import com.dev.moskal.postbrowser.databinding.PostListFragmentBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -43,25 +44,33 @@ class PostListFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         binding.apply {
-            clickListener = viewModel
+            model = viewModel
             lifecycleOwner = viewLifecycleOwner
         }
-        lifecycleScope.launch {
-            viewModel.items.collect {
-                postAdapter.submitData(it)
-            }
-        }
-        observeActions()
         handleLoadingErrors()
+        observeViewModel()
     }
 
-    private fun observeActions() {
+    private var searchJob: Job? = null
+
+    private fun observeViewModel() {
         viewModel.actions.observe(viewLifecycleOwner) {
             when (it) {
-                PostListViewAction.FailedToDeleteAction -> showSnackbar(R.string.unable_to_delete_post)
+                PostListViewAction.FailedToDeletePost -> showSnackbar(R.string.unable_to_delete_post)
                 is PostListViewAction.OnPostSelected -> navigateToPostDetail(it.postId)
+                PostListViewAction.FailedToLoadMorePosts -> showSnackbar(R.string.unable_to_load_more_post)
             }
         }
+
+        lifecycleScope.launch {
+            viewModel.items.collect {
+                searchJob = async {
+                    Timber.i("__ as")
+                    postAdapter.submitData(it)
+                }
+            }
+        }
+
     }
 
     private fun navigateToPostDetail(postId: Int) {
@@ -78,27 +87,9 @@ class PostListFragment : Fragment() {
         }
     }
 
-
     private fun handleLoadingErrors() {
-        binding.apply {
-            postAdapter.addLoadStateListener { loadState ->
-                /*
-                 * note: that is one of the reason I am not a fan of Paging library:
-                 * loading state and errors are part of adapter
-                 * making more and more code going int fragment,
-                 * instead of using clear viewState pattern from viewModel as a single source of truth
-                 */
-                errorView.isVisible = loadState.source.refresh is LoadState.Error
-                val uncriticalError = loadState.source.append as? LoadState.Error
-                    ?: loadState.source.prepend as? LoadState.Error
-                    ?: loadState.append as? LoadState.Error
-                    ?: loadState.prepend as? LoadState.Error
-                uncriticalError?.let {
-                    showSnackbar(R.string.unable_to_load_more_post)
-                }
-            }
-            errorView.setOnClickListener { postAdapter.retry() }
-        }
+        // refactor: move to viewModel and send Action back to view
+        binding.errorView.setOnClickListener { postAdapter.retry() }
     }
 
     private fun setupRecyclerView() {
@@ -107,5 +98,6 @@ class PostListFragment : Fragment() {
             hasFixedSize()
             adapter = postAdapter
         }
+        postAdapter.addLoadStateListener(viewModel::onPagingStateChanged)
     }
 }
