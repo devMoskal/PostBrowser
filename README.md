@@ -2,7 +2,9 @@ PostBrowser
 =========
 Sample Kotlin project using MVVM with clean architecture, data binding, Hilt and flows.
 
-<img src="https://raw.githubusercontent.com/devMoskal/PostBrowser/master/screenshots/portrait.png?token=ALR5GQVJHJRW5TJICIYIABK7PIM6K" width="230" height="500">     <img src="https://raw.githubusercontent.com/devMoskal/PostBrowser/master/screenshots/landscape.png?token=ALR5GQXIBHHTMEJ3ABPI46C7PIMXK" width="500" height="230">
+![Portrait](screenshots/portrait.png "Portrait" )
+![Landscape](screenshots/landscape.png "Landscape")
+
 
 # Architecture
 
