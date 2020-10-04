@@ -80,7 +80,7 @@ internal class PhotoViewHolder(
         fun loadImage(view: ImageView, url: String?) {
             if (url == null) return
 
-            // workaround for header issue while using https://via.placeholder.com
+            // workaround for header issue while using photos from https://via.placeholder.com
             val glideUrl = GlideUrl(
                 url,
                 LazyHeaders.Builder()
@@ -95,5 +95,14 @@ internal class PhotoViewHolder(
         }
 
         private const val HEADER_KEY_USER_AGENT = "User-Agent"
+    }
+}
+
+internal class AlbumsLabelViewHolder(
+    parent: ViewGroup
+) : RecyclerView.ViewHolder(inflateView(parent)) {
+    companion object {
+        private fun inflateView(parent: ViewGroup) =
+            LayoutInflater.from(parent.context).inflate(R.layout.album_label_item, parent, false)
     }
 }

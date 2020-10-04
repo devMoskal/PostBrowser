@@ -70,11 +70,13 @@ class AlbumListReducer @Inject constructor() {
     ): List<DetailsListItem> {
         val result = mutableListOf<DetailsListItem>()
         header?.let(result::add)
+        if (albums.isNotEmpty()) {
+            result.add(DetailsListItem.AlbumsLabelItem)
+        }
         albums.forEach { album ->
             val albumItem = AlbumItem(album)
             result.add(albumItem)
-            val elements = album.photos
-                .map { PhotoItem(it, isVisible = albumItem.isExpanded) }
+            val elements = album.photos.map { PhotoItem(it, isVisible = albumItem.isExpanded) }
             cachedFoldableItems[albumItem.id] = elements
         }
         return result

@@ -2,6 +2,7 @@ package com.dev.moskal.postbrowser.app.postdetail
 
 
 import com.dev.moskal.postbrowser.app.postdetail.AlbumListViewTypes.TYPE_ALBUM
+import com.dev.moskal.postbrowser.app.postdetail.AlbumListViewTypes.TYPE_ALBUMS_LABEL
 import com.dev.moskal.postbrowser.app.postdetail.AlbumListViewTypes.TYPE_DETAILS
 import com.dev.moskal.postbrowser.app.postdetail.AlbumListViewTypes.TYPE_LOADING
 import com.dev.moskal.postbrowser.app.postdetail.AlbumListViewTypes.TYPE_PHOTO
@@ -14,6 +15,7 @@ object AlbumListViewTypes {
     internal const val TYPE_DETAILS = 1
     internal const val TYPE_ALBUM = 2
     internal const val TYPE_PHOTO = 3
+    internal const val TYPE_ALBUMS_LABEL = 4
 }
 
 sealed class DetailsListItem(val type: Int) {
@@ -52,6 +54,8 @@ sealed class DetailsListItem(val type: Int) {
             isVisible
         )
     }
+
+    object AlbumsLabelItem : DetailsListItem(TYPE_ALBUMS_LABEL)
 
     object AlbumLoadingItem : DetailsListItem(TYPE_LOADING)
 }

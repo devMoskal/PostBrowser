@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.dev.moskal.postbrowser.app.postdetail.AlbumListViewTypes.TYPE_ALBUM
+import com.dev.moskal.postbrowser.app.postdetail.AlbumListViewTypes.TYPE_ALBUMS_LABEL
 import com.dev.moskal.postbrowser.app.postdetail.AlbumListViewTypes.TYPE_DETAILS
 import com.dev.moskal.postbrowser.app.postdetail.AlbumListViewTypes.TYPE_LOADING
 import com.dev.moskal.postbrowser.app.postdetail.AlbumListViewTypes.TYPE_PHOTO
@@ -36,6 +37,7 @@ class AlbumListAdapter @Inject constructor() :
             TYPE_ALBUM -> AlbumViewHolder(parent)
             TYPE_PHOTO -> PhotoViewHolder(parent)
             TYPE_LOADING -> LoadingViewHolder(parent)
+            TYPE_ALBUMS_LABEL -> AlbumsLabelViewHolder(parent)
             else -> throw IllegalArgumentException("Invalid view type")
         }
     }
@@ -95,6 +97,7 @@ class AlbumListDiffUtil : DiffUtil.ItemCallback<DetailsListItem>() {
             is DetailsListItem.PhotoItem -> newItem is DetailsListItem.PhotoItem && oldItem.url == newItem.url
             DetailsListItem.AlbumLoadingItem -> newItem is DetailsListItem.AlbumLoadingItem
             is DetailsListItem.HeaderItem -> newItem is DetailsListItem.HeaderItem
+            is DetailsListItem.AlbumsLabelItem -> newItem is DetailsListItem.AlbumsLabelItem
         }
 
     override fun areContentsTheSame(
