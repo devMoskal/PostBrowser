@@ -19,7 +19,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -65,7 +64,6 @@ class PostListFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.items.collect {
                 searchJob = async {
-                    Timber.i("__ as")
                     postAdapter.submitData(it)
                 }
             }

@@ -81,6 +81,7 @@ class PostListFragmentTest : BaseHiltTest() {
 
         // clear search input text
         onView(withId(R.id.search_post_et)).perform(ViewActions.replaceText(""))
+        Thread.sleep(200) // room to improvement - remove sleep
 
         // check both posts are visible
         onView(withText("title1!")).check(matches(isDisplayed()))

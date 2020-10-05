@@ -9,7 +9,6 @@ import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
-@Suppress("EXPERIMENTAL_API_USAGE")
 @Singleton
 class FetchData @Inject constructor(private val repository: Repository) {
     private val _syncState = MutableStateFlow(SyncState.NOT_STARTED)

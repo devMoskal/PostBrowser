@@ -118,6 +118,7 @@ dependencies {
     testImplementation "com.google.truth:truth:$truth_version"
     testImplementation "io.mockk:mockk:$mockk_version"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_core_version"
+    testImplementation "androidx.arch.core:core-testing:$unit_core_testing_version"
 
     // UI test
     androidTestImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
