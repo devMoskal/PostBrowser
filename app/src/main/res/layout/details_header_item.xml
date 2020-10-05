@@ -44,7 +44,7 @@
                 tools:text="Title 1" />
 
             <TextView
-                android:id="@+id/responsibilityTV"
+                android:id="@+id/body"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_general"

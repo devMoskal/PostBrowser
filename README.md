@@ -48,10 +48,11 @@ Tests fallows given/when/then pattern. Written in junit5 and extensively uses Mo
 
 Android tests:
 -----------
-- UI tests TODO....
-- DB integration tests 
+- end-to-end test
+- fragments test
+- database tests
 
-Note: Because of time constraints I did not manage to fully cover app with tests. However testable architecture is prepared and some of them are ready to show style and patterns I'm typically using.
+Note: Because of time constraints I did not manage to fully cover app with tests. However testable architecture is prepared and many of them are written to show style and patterns I'm typically using.
 
 # Assumptions
 - In database I've preserved only part of fetched api responses needed by application
@@ -59,3 +60,11 @@ Note: Because of time constraints I did not manage to fully cover app with tests
 - I’ve assumed that proper architecture, showcase of technology, error handling and testability are much more important to present in this assessment then fancy UI. Therefore I keep UI quite minimalistic
 
 Note: in production project I would consult doubts with designer, PO or/and BI. Current code is written in the way that potential changes should be easy to make
+
+
+Usage of experimental API:
+-----------
+In order to make coding challenge as fun as possible I've used brand new libs, still not ready for production:
+- experimental coroutines API, including StateFlows ('hot' flows) and coroutines-testing
+- Paging 3.0 alpha, with support for flows
+- Hilt alpha version

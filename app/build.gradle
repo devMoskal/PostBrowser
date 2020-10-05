@@ -119,7 +119,7 @@ dependencies {
     testImplementation "io.mockk:mockk:$mockk_version"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_core_version"
 
-    // UI test - not all  are needed yet with hilt, room, and
+    // UI test
     androidTestImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
     kaptAndroidTest "com.google.dagger:hilt-android-compiler:$hilt_version"
     kaptAndroidTest "androidx.hilt:hilt-compiler:$hilt_androidx_version"
@@ -132,5 +132,6 @@ dependencies {
     androidTestImplementation "androidx.arch.core:core-testing:$arch_testing_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$espresso_version"
+    androidTestImplementation "androidx.test.espresso.idling:idling-concurrent:$espresso_version"
     androidTestImplementation "com.google.truth:truth:$truth_version"
 }
